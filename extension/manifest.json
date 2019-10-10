@@ -1,18 +1,14 @@
 {
-
     "manifest_version": 2,
-    "name": "Borderify",
+    "name": "ClickbaitDetector",
     "version": "1.0",
-  
-    "description": "Adds a red border to all webpages matching mozilla.org.",
-  
+    "description": "Warns about manipulative title descriptions.",
     "icons": {
       "48": "icons/border-48.png"
     },
     "permissions":
       ["<all_urls>"]
     ,
-    "content_security_policy":"script-src 'self' *://cs.csub.edu/~jstaggs/*; object-src 'self'",
     "background":{
       "scripts":["background.js"]
     },
