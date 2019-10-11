@@ -59,6 +59,11 @@
                 print "],";
             else
                 print "]";
+
+            // =========================================================
+            // Insert page into database and/or update score in database
+            // =========================================================
+            // (to be added)
         }
 
         // JSON close tag

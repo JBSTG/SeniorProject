@@ -1,36 +1,56 @@
 <?php
     // Arguments:       url (page URL)
-    // Returns:         NULL 
+    // Returns JSON:    page_score
+    //                  site_score
+    //                  author_score
 
     include("function_parseDomain.php");
 
     if (isset($_REQUEST["url"])) {
-        // URL provided, add to database if not exist
+        // URL provided, pull scores from database
+        //print "Fetching scores for URL:  " . $_REQUEST["url"];
 
         $link = mysqli_connect("localhost", "datadogs", "DataDogs2020CSUB") or die("Could not connect to database\n");
         mysqli_select_db($link, "analytics") or die("Could not select database\n");
 
-        // Check if URL exists
-        $query = "SELECT URL FROM pages WHERE URL = '" . $_REQUEST["url"] . "'";
+        // Fetch the page score
+        $query = "SELECT Page_Score FROM pages WHERE URL = '" . $_REQUEST["url"] . "'";
         $result = mysqli_query($link, $query);
         $numrows = mysqli_num_rows($result);
         if ($numrows) {
-            // Page is already in database
-            print "Page already exists in database!";
+            $row = mysqli_fetch_row($result);
+            $pagescore = $row[0];
         } else {
-            // Page does not exist
-            // Determine domain name
-            $domain = parseDomain($_REQUEST["url"]);
-            $query = "INSERT INTO pages (URL, Domain, Date_Added) VALUES ('" . $_REQUEST["url"] . "','$domain','" . date("Y-m-d H:i:s") . "')";
-            mysqli_query($link, $query);
-            print "Inserted the following:<p>";
-            print "Page URL:  " . $_REQUEST["url"] . "<br>";
-            print "Domain:  $domain<br>";
-            print "Date_Added:  " . date("Y-m-d H:i:s");
+            $pagescore = -1;
         }
+
+        // Fetch the domain (site) score
+        $domain = parseDomain($_REQUEST["url"]);
+        $query = "SELECT AVG(Page_Score) FROM pages WHERE Domain = '$domain'";
+        $result = mysqli_query($link, $query);
+        $numrows = mysqli_num_rows($result);
+        if ($numrows) {
+            $row = mysqli_fetch_row($result);
+            $sitescore = $row[0];
+        } else {
+            $sitescore = -1;
+        }
+
+        // Fetch the author score
+        $authorscore = -1;
+
+        // Print the results (JSON)
+
+        $arr = array("page_score" => (double)$pagescore, "site_score" => (double)$sitescore, "author_score" => (double)$authorscore);
+        print json_encode($arr);
+
+        // =========================================================
+        // Insert page into database and/or update score in database
+        // =========================================================
+        // (to be added)
+
     } else {
         print "Error:  URL required and not provided";
     }
-
 ?>
 
