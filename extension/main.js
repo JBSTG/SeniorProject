@@ -12,7 +12,8 @@ function handleError(error) {
 }
 browser.runtime.onMessage.addListener(function(message){
   linksObject = message;
-  console.log(message);
+
+  console.log(linksObject);
 });
 
 function notifyBackgroundPage(e) {
@@ -28,14 +29,14 @@ window.onload = function(e){
 }
 
 function buildRequestString(links){
-    var requestString = "";
+    var requestString = new Object();
+    requestString.links = [];
     for(var i=0;i<links;i++){
-        var li = "l"+i;
         var string = document.links.item(i).href;
         string = string.split(/[&?#$-+]/);
-        requestString+=string[0]+"^";
+        requestString.links.push(string[0]);
     }
-    requestString = requestString.substring(0, requestString.length - 1);
+    console.log(requestString);
     return requestString;
 }
 //TODO: Needs to work with dynamically added elements as well.
@@ -44,13 +45,11 @@ console.log("EEE");
 for(var i = 0;i<domLinks.length;i++){
     domLinks[i].addEventListener("mouseover", function(e){
         if(linksObject){
-            for(var i =0;i<linksObject.links.length;i++){
-                if(linksObject.links[i].url==e.target.href.split(/[&?#$-+]/)){
-                    console.log(linksObject.links[i].value);
-                    moveInfoBox(linksObject.links[i].value,e.clientX,e.clientY);
-                    break;
-                }
-            }
+
+            var url = e.target.href;
+            console.log(url+": "+linksObject[url].site_score);
+            var linkScores = linksObject[url];
+            moveInfoBox(url,linkScores,e.clientX,e.clientY);
         }
     });
 }
@@ -58,12 +57,12 @@ for(var i = 0;i<domLinks.length;i++){
 
 function createInfoBox(){
   var infoBox = document.createElement("div");
-  infoBox.style.width = "150px";
-  infoBox.style.color = "red";
-  infoBox.style.height= "100px";
+  //infoBox.style.width = "150px";
+  infoBox.style.color = "darkslategray";
+  //infoBox.style.height= "100px";
   infoBox.style.backgroundColor = "white";
   infoBox.style.position = "absolute";
-  infoBox.style.border="1px black solid";
+  infoBox.style.border="1px darkslategray solid";
   infoBox.style.left = 300+"px";
   infoBox.style.top = 300+"px";
   infoBox.style.display = "none";
@@ -71,13 +70,16 @@ function createInfoBox(){
   return infoBox;
 }
 
-function moveInfoBox(value,x,y){
+function moveInfoBox(url,values,x,y){
+  infoBox.innerHTML = "";
   infoBox.style.display = "block";
-  infoBox.innerHTML= "Site Score: "+value;
+  infoBox.innerHTML+=url+"<br>";
+  infoBox.innerHTML+="<hr>";
+  infoBox.innerHTML+="Page Score: "+values.page_score+"<br>";
+  infoBox.innerHTML+="Author Score: "+values.author_score+"<br>";
+  infoBox.innerHTML+="Site Score: "+values.site_score+"<br>";
   infoBox.style.left = x-75+"px";
   infoBox.style.top = y-120+"px";
   console.log("HERE");
 }
-
-
 console.log("END");
