@@ -23,8 +23,11 @@
             $pagescore = $row[0];
         } else {
             // Page score does not exist in database--call analyzer
-            $output = exec("python analyzer.py " . $_REQUEST["url"]);
-            print $output;
+            // Not working yet
+            $cmd = "python /var/www/html/api/analyzer.py " . $_REQUEST["url"];
+            print $cmd;
+            $output = shell_exec($cmd);
+            print sizeof($output);
             $pagescore = -1;
         }
 
