@@ -16,15 +16,16 @@
         // JSON open tag
         print "{";
 
+
         // For each URL in the list 
         for ($i = 0; $i < sizeof($list); $i++) {
             $url = $list[$i];
 
             // Print URL
-            print chr(34) . $url . chr(34) . ": [";
+            print chr(34) . $url . chr(34) . ": {";
 
             // Check database for the page score
-            $query = "SELECT Page_Score FROM pages WHERE URL = '$url'";
+            $query = "SELECT Page_Score FROM pages WHERE URL = '$url' AND NOT Page_Score IS NULL";
             $result = mysqli_query($link, $query);
             $numrows = mysqli_num_rows($result);
             if ($numrows) {
@@ -50,15 +51,17 @@
                 // Site score not found in database
                 $sitescore = -1;
             }
+            //TODO:REMOVE THIS LATER
+            if($sitescore==null){$sitescore=-1;}
             print chr(34) . "site_score" . chr(34) . ":$sitescore, ";
 
             // Author score not implemented for now
             print chr(34) . "author_score" . chr(34) . ":-1 ";
 
             if ($i + 1 < sizeof($list))
-                print "],";
+                print "},";
             else
-                print "]";
+                print "}";
 
             // =========================================================
             // Insert page into database and/or update score in database
