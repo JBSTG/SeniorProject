@@ -2,12 +2,15 @@ console.log("Background");
 
 function handleMessage(request, sender, sendResponse) {
 	var responseObject = JSON.parse('{"result":true, "count":42}');
-	//console.log("Message from the content script: " + request.data);
 	var httpRequest = new XMLHttpRequest();
-	httpRequest.open("POST","http://sandbox1.datadogsanalytics.com/serverResponse.php",true);
+	var url = "https://datadogsanalytics.com/api/plugin-submit-multiple.php";
+	url = url+="?list="+JSON.stringify(request.data.links);
+	httpRequest.open("POST",url,true);
 	httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	httpRequest.send("links="+request.data);
+	httpRequest.send();
+	
 	httpRequest.onload = function(){
+		
 		responseObject = JSON.parse(this.responseText);
 		console.log(responseObject);
 		sendResponse(request.data);
@@ -16,7 +19,11 @@ function handleMessage(request, sender, sendResponse) {
 			  console.log("Message sent to content script.");
 			});
 		  });
+		 
+		 console.log(this.responseText);
+		 console.log(JSON.parse(this.responseText));
 	}
+	
 	//Not currently in use, but keep it.
 	//sendResponse(responseObject);
 }
