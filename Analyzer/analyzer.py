@@ -48,4 +48,3 @@ for learning_rate in lr_list:
     gb_clf.fit(X_train, y_train)
     print("Learning Rate: ", learning_rate)
     print("Accuracy score (training): {0:.3f}".format(gb_clf.score(X_train, y_train)))
-    print("Accuracy score (validation): {0:.3f}\n".format(gb_clf.score(X_val, y_val)))
