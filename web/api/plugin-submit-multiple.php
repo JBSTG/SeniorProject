@@ -33,8 +33,14 @@
                 $row = mysqli_fetch_row($result);
                 $pagescore = $row[0];
             } else {
-                // Page not found in database
+                // Page score does not exist in database--call analyzer
+                $cmd = "python /var/www/html/api/analyzer.py $url 2>&1";
+                //print $cmd;
+                $output = exec($cmd);
+                //print $output . "<p>";
                 $pagescore = -1;
+
+                // Update database with new score
             }
             print chr(34) . "page_score" . chr(34) . ":$pagescore, ";
 
