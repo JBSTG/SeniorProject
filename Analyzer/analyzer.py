@@ -36,19 +36,34 @@ for i in range(1, 10, 1):
 
 #print("Score: {:0.2f}\n".format(avg))
 
+# look for title in csv file and return score if
+# avaialable, else return -1
+def check_title(title):
+    with open('clickbait_data.csv', 'r') as f:
+        s = f.read()
+        if title not in s:
+            print("Score:", -1)
+        else:
+            print("Title already in database")
+
 # function will grab title and all links in url
 def grabURL(url):
     r = requests.get(url)
     tree = fromstring(r.content)
-    print("Score:", -1, "\n")
+    title = tree.findtext(".//title")
+    ahref = tree.xpath("//a/@href")
+    # call function to check for title
+    check_title(title)
     # prints article title
-    print(tree.findtext(".//title"), "\n")
+    print(title, "\n")
     # prints list of links in url
-    print(tree.xpath("//a/@href"))
+    print(ahref)
+
 try:
     # takes in url argument
     grabURL(sys.argv[1])
 except:
     # inform you that no argument has been provided
     print("No URL in command line")
-    sys.exit(1)
+    # exit 
+    sys.exit(0)
