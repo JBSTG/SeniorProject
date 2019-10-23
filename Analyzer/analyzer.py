@@ -20,20 +20,19 @@ sum = 0
 count = 0
 listOfAverages = []
 for i in range(1, 10, 1):
-    for i in range(1, 10, 1):
-        aLine = listOfLines[i]
-        lineItems = aLine.split(',')
-        # set id to Num column
-        id = lineItems[0]
-        # set data to clickbait column
-        data = lineItems[len(lineItems)-2]
-        count = count + 1
-        # sum of data
-        sum = sum + float(data)
-        avg = sum / count
-        #print('id=', id, 'sum=', sum, 'avg=', avg)
-        #subList = [count, avg]
-        #listOfAverages.append(subList)
+    aLine = randlistOfLines[i]
+    lineItems = aLine.split(',')
+    # set id to Num column
+    id = lineItems[0]
+    # set data to clickbait column
+    data = lineItems[len(lineItems)-2]
+    count = count + 1
+    # sum of data
+    sum = sum + float(data)
+    avg = sum / count
+    #print('id=', id, 'sum=', sum, 'avg=', avg)
+    #subList = [count, avg]
+    #listOfAverages.append(subList)
 
 print('Score: {:0.2f}\n'.format(avg))
 
