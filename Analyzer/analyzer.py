@@ -12,10 +12,10 @@ listOfLines = dataFile.read().splitlines()
 
 # set line starting from line 1 of csv file
 aLine = listOfLines[1]
+
 # when printed list will look like following:
 # ['Num', 'Clickbait', 'Title']
 lineItems = aLine.split(',')
-
 sum = 0
 count = 0
 listOfAverages = []
@@ -34,20 +34,21 @@ for i in range(1, 10, 1):
     #subList = [count, avg]
     #listOfAverages.append(subList)
 
-print('Score: {:0.2f}\n'.format(avg))
+#print("Score: {:0.2f}\n".format(avg))
 
 # function will grab title and all links in url
 def grabURL(url):
     r = requests.get(url)
     tree = fromstring(r.content)
+    print("Score:", -1, "\n")
     # prints article title
-    print (tree.findtext(".//title"), "\n")
+    print(tree.findtext(".//title"), "\n")
     # prints list of links in url
-    print (tree.xpath("//a/@href"))
+    print(tree.xpath("//a/@href"))
 try:
     # takes in url argument
     grabURL(sys.argv[1])
 except:
     # inform you that no argument has been provided
-    print ('No URL in command line')
+    print("No URL in command line")
     sys.exit(1)
