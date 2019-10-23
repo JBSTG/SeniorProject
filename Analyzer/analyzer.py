@@ -20,7 +20,7 @@ sum = 0
 count = 0
 listOfAverages = []
 for i in range(1, 10, 1):
-    aLine = randlistOfLines[i]
+    aLine = listOfLines[i]
     lineItems = aLine.split(',')
     # set id to Num column
     id = lineItems[0]
