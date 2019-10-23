@@ -9,42 +9,46 @@ dataFile = open('clickbait_data.csv', encoding='utf-8')
 
 # read the data from file into a list
 listOfLines = dataFile.read().splitlines()
-aLine = listOfLines[1]
-lineItems = aLine.split(',')
-print(lineItems)
 
-value = lineItems[1]
+# set line starting from line 1 of csv file
+aLine = listOfLines[1]
+# when printed list will look like following:
+# ['Num', 'Clickbait', 'Title']
+lineItems = aLine.split(',')
+
 sum = 0
 count = 0
 listOfAverages = []
-output = int(float(value))
+for i in range(1, 10, 1):
+    for i in range(1, 10, 1):
+        aLine = listOfLines[i]
+        lineItems = aLine.split(',')
+        # set id to Num column
+        id = lineItems[0]
+        # set data to clickbait column
+        data = lineItems[len(lineItems)-2]
+        count = count + 1
+        # sum of data
+        sum = sum + float(data)
+        avg = sum / count
+        #print('id=', id, 'sum=', sum, 'avg=', avg)
+        #subList = [count, avg]
+        #listOfAverages.append(subList)
 
-for i in range(1, len(listOfLines), 1):
-    aLine = listOfLines[i]
-    lineItems = aLine.split(',')
-    value = lineItems[1]
-    count = count + 1
-    sum = sum + output
-    avg = sum / count
-    for i in range(1, len(listOfLines) % 6, 1):
-        subList = [avg]
-        listOfAverages.append(subList)
-        sum = int(float(value))
-        count = 1
+print('Score: {:0.2f}\n'.format(avg))
 
-for i in range(0, len(listOfAverages), 1):
-    print(listOfAverages[i])
-
-'''
 # function will grab title and all links in url
 def grabURL(url):
     r = requests.get(url)
     tree = fromstring(r.content)
-    print (tree.findtext(".//title"))
+    # prints article title
+    print (tree.findtext(".//title"), "\n")
+    # prints list of links in url
     print (tree.xpath("//a/@href"))
 try:
+    # takes in url argument
     grabURL(sys.argv[1])
 except:
-    print ('URl must be supplied on the comman line')
+    # inform you that no argument has been provided
+    print ('No URL in command line')
     sys.exit(1)
-'''
