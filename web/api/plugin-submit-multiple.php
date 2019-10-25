@@ -39,6 +39,9 @@
                 $pagescore = trim(explode(":", $output[0])[1]);
 
                 // Update database with new score
+                $currentdate = date("Y-m-d H:i:s");
+                $query = "REPLACE INTO pages (URL, Page_Score, Last_Analyzed) VALUES ('$url', $pagescore, '$currentdate')";
+                mysqli_query($link, $query);
 
             }
             print chr(34) . "page_score" . chr(34) . ":$pagescore, ";
@@ -68,10 +71,6 @@
             else
                 print "}";
 
-            // =========================================================
-            // Insert page into database and/or update score in database
-            // =========================================================
-            // (to be added)
         }
 
         // JSON close tag
