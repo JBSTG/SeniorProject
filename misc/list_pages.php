@@ -5,14 +5,14 @@
 
 
     // Pull a list of all URLs in database
-    $query = "SELECT URL, Date_Added, Last_Crawled FROM pages";
+    $query = "SELECT URL, Page_Score, Last_Analyzed FROM pages";
     $result = mysqli_query($link, $query);
     $numrows = mysqli_num_rows($result);
 
     print "$numrows pages in database\n\n";
 
-    print "Date                   Last Crawled           URL\n";
-    print "--------------------------------------------------------------------------\n";
+    print "Score  Last Analyzed          URL\n";
+    print "-------------------------------------------------------\n";
 
     // Print the list
     for ($i = 0; $i < $numrows; $i++) {
@@ -20,7 +20,7 @@
         if (strlen($row[2]))
             print "$row[1]    $row[2]    $row[0]\n";
         else
-            print "$row[1]                           $row[0]\n";
+            print "$row[1]                             $row[0]\n";
     }
 ?>
 

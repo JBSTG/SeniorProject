@@ -39,8 +39,9 @@
                 $pagescore = trim(explode(":", $output[0])[1]);
 
                 // Update database with new score
+                $domain = parseDomain($url);
                 $currentdate = date("Y-m-d H:i:s");
-                $query = "REPLACE INTO pages (URL, Page_Score, Last_Analyzed) VALUES ('$url', $pagescore, '$currentdate')";
+                $query = "REPLACE INTO pages (URL, Domain, Page_Score, Last_Analyzed) VALUES ('$url', '$domain', $pagescore, '$currentdate')";
                 mysqli_query($link, $query);
 
             }

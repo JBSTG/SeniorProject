@@ -28,8 +28,9 @@
             $pagescore = trim(explode(":", $output[0])[1]);
 
             // Update database with new score
+            $domain = parseDomain($_REQUEST["url"]);
             $currentdate = date("Y-m-d H:i:s"); 
-            $query = "REPLACE INTO pages (URL, Page_Score, Last_Analyzed) VALUES ('" . $_REQUEST["url"] . "', $pagescore, '$currentdate')";
+            $query = "REPLACE INTO pages (URL, Domain, Page_Score, Last_Analyzed) VALUES ('" . $_REQUEST["url"] . "', '$domain', $pagescore, '$currentdate')";
             mysqli_query($link, $query);
         }
 
@@ -52,11 +53,6 @@
 
         $arr = array("page_score" => (double)$pagescore, "site_score" => (double)$sitescore, "author_score" => (double)$authorscore);
         print json_encode($arr);
-
-        // =========================================================
-        // Insert page into database and/or update score in database
-        // =========================================================
-        // (to be added)
 
     } else {
         print "Error:  URL required and not provided";
