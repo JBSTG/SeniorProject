@@ -1,7 +1,7 @@
 console.log("Background");
 
 function handleMessage(request, sender, sendResponse) {
-	var responseObject = JSON.parse('{"result":true, "count":42}');
+	var responseObject = null;
 	var httpRequest = new XMLHttpRequest();
 	var url = "https://datadogsanalytics.com/api/plugin-submit-multiple.php";
 	url = url+="?list="+JSON.stringify(request.data.links);
@@ -11,6 +11,7 @@ function handleMessage(request, sender, sendResponse) {
 	
 	httpRequest.onload = function(){
 		
+		console.log(this.responseText);
 		responseObject = JSON.parse(this.responseText);
 		console.log(responseObject);
 		sendResponse(request.data);
@@ -22,7 +23,7 @@ function handleMessage(request, sender, sendResponse) {
 		 
 		 console.log(this.responseText);
 		 console.log(JSON.parse(this.responseText));
-	}
+		}
 	
 	//Not currently in use, but keep it.
 	//sendResponse(responseObject);

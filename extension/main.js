@@ -2,7 +2,7 @@ console.log("START");
 document.body.style.border = "5px solid red";
 var x = document.links.length;
 var data = buildRequestString(x);
-var linksObject = null;
+var linksObject = new Object();
 var infoBox = createInfoBox();
 function handleResponse(message) {
   //console.log(message);
@@ -11,8 +11,9 @@ function handleError(error) {
   //console.log(`Error: ${error}`);
 }
 browser.runtime.onMessage.addListener(function(message){
-  linksObject = message;
-
+  //linksObject = message;
+  Object.assign(linksObject, message);
+  console.log(message);
   console.log(linksObject);
 });
 
@@ -33,27 +34,65 @@ function buildRequestString(links){
     requestString.links = [];
     for(var i=0;i<links;i++){
         var string = document.links.item(i).href;
-        string = string.split(/[&?#$-+]/);
+        string = string.split(/[&?#$]/);
         requestString.links.push(string[0]);
     }
     console.log(requestString);
     return requestString;
 }
+/*
 //TODO: Needs to work with dynamically added elements as well.
 var domLinks = document.getElementsByTagName("a");
 console.log("EEE");
 for(var i = 0;i<domLinks.length;i++){
     domLinks[i].addEventListener("mouseover", function(e){
         if(linksObject){
-
             var url = e.target.href;
             console.log(url+": "+linksObject[url].site_score);
             var linkScores = linksObject[url];
-            moveInfoBox(url,linkScores,e.clientX,e.clientY);
+            moveInfoBox(url,linkScores,e.pageX,e.pageY);
         }
     });
 }
+*/
 
+function processLinks(e) {
+  var e = window.e || e;
+
+  if (e.target.tagName !== 'A'){
+    return;
+  }
+  var url = e.target.href;
+  url = url.split(/[&?#$]/);
+  url = url[0];
+  if(linksObject){
+    console.log(url);
+    if(linksObject[url]!=null){
+      var linkScores = linksObject[url];
+      moveInfoBox(url,linkScores,e.pageX,e.pageY);
+    }else{
+      //TODO: I'm going to make a direct call to the API here, I should use messages later
+      console.log("There is no match for this URL, contacting API.");
+      
+      var sReq = new XMLHttpRequest();
+      sReq.open("POST","https://datadogsanalytics.com/api/test/plugin-submit-url.php",true);
+      sReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      sReq.send("url="+url);
+
+      sReq.onload = function(){
+        var newURL = "{\""+url+"\":"+this.responseText+"}";
+        newURL = JSON.parse(newURL);
+        Object.assign(linksObject,newURL);
+        //console.log(this.responseText);
+      }
+    }
+    }
+}
+
+if (document.addEventListener)
+  document.addEventListener('mouseover', processLinks, false);
+else
+  document.attachEvent('onmouseover', processLinks);
 
 function createInfoBox(){
   var infoBox = document.createElement("div");
