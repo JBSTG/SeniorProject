@@ -36,7 +36,8 @@
                 // Page score does not exist in database--call analyzer
                 $cmd = "python3 /var/www/html/api/analyzer.py $url";
                 exec($cmd, $output);
-                $pagescore = trim(explode(":", $output[0])[1]);
+                //$pagescore = trim(explode(":", $output[0])[1]);
+                $pagescore = $output[0];
 
                 // Update database with new score
                 $domain = parseDomain($url);
