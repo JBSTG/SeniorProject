@@ -29,6 +29,9 @@
         //$pagescore = trim(explode(":", $output[0])[1]);       // Old analyzer.py output format
         $pagescore = $output[0];
         $pagetitle = $output[1];
+        // Remove single quotes from page title
+        $pagetitle = str_replace("'", "", $pagetitle);
+
         print "    Page title:  $pagetitle\n";
         //print "    Score: $pagescore\n";
         print "    Old score:  $oldscore, new score: $pagescore\n";
