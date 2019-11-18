@@ -9,7 +9,7 @@
         $link = mysqli_connect("localhost", "datadogs", "DataDogs2020CSUB") or die("Could not connect to database\n");
         mysqli_select_db($link, "analytics") or die("Could not select database\n");
 
-        $domain = parseDomain($_REQUEST["url"]);
+        $domain = parseDomain($url);
         $query = "SELECT AVG(Page_Score) FROM pages WHERE Domain = '$domain'";
         $result = mysqli_query($link, $query);
         $numrows = mysqli_num_rows($result);
