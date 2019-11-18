@@ -1,20 +1,21 @@
 <?php
-    // Re-run the analyzer for all domains in the database
-    // Updated 11/15/19 KT
+    // Re-run both analyzer scrips for all pages and domains in the database
+    // Updated 11/18/19 KT
 
     include("function_parseDomain.php");
 
     $link = mysqli_connect("localhost", "datadogs", "DataDogs2020CSUB") or die("Could not connect to database\n");
     mysqli_select_db($link, "analytics") or die("Could not select database\n");
 
-    // Pull list of pages from database
-    $query = "SELECT URL,Page_Score FROM pages";
+    // ------------------------------------------------
+    // Re-run analyzer.py for each page URL in database
+    // ------------------------------------------------
+
+    $query = "SELECT URL,Page_Score FROM pages WHERE Last_Analyzed < '2019-11-15'";
     $result = mysqli_query($link, $query);
     $numrows = mysqli_num_rows($result);
+    print "Re-running analyzer.py for $numrows URLs..\n";
 
-    print "Re-running analysis for $numrows URLs..";
-
-    // Call analyzer for each page URL
     for ($i = 0; $i < $numrows; $i++) {
         // Fetch row
         $row = mysqli_fetch_row($result);
@@ -44,6 +45,35 @@
         mysqli_query($link, $query);
 
         // Sleep 10 seconds to avoid hitting a single site too hard
-        sleep(10);
+        sleep(5);
     }
+
+    // ------------------------------------------------
+    // Re-run pagescore.py for each domain in database
+    // ------------------------------------------------
+
+    $query = "SELECT Domain FROM pages GROUP BY Domain ORDER BY Domain ASC";
+    $result = mysqli_query($link, $query);
+    $numrows = mysqli_num_rows($result);
+    print "\nRunning pagescore.py for $numrows domains..\n";
+
+    for ($i = 0; $i < $numrows; $i++) {
+        // Fetch row
+        $row = mysqli_fetch_row($result);
+        $domain = $row[0];
+        print "    Checking $domain..  ";
+        $cmd = "python3 /var/www/html/api/pagescore.py -d https://" . $domain;
+        unset($output);
+        //print "    want to run:  $cmd\n";
+        // Temporary fix - skip bonvoyaged.com
+        if ($domain != "bonvoyaged.com")
+            exec($cmd, $output);
+        $domainscore = trim(explode(":", $output[0])[1]);
+        print "score = $domainscore\n";
+        // Add updated score to database
+        $currentdate = date("Y-m-d H:i:s");
+        $query = "REPLACE INTO domain_pagescore (Domain, Score, Last_Analyzed) VALUES ('$domain', $domainscore, '$currentdate')";
+        mysqli_query($link, $query);
+    }
+
 ?>
