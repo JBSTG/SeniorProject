@@ -2,7 +2,7 @@
     function parseDomain($url)
     {
         // Pull out only the domain portion of the URL
-        $domain = explode("/", $_REQUEST["url"])[2];
+        $domain = explode("/", $url)[2];
 
         // Handle a couple of special cases here (i.e. treat news.google.com as itself rather than google.com
         if ($domain == "news.google.com") return $domain;
