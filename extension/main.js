@@ -26,7 +26,7 @@ function notifyBackgroundPage(e) {
 }
 
 window.onload = function(e){
-	notifyBackgroundPage(e);
+	//notifyBackgroundPage(e);
 }
 
 function buildRequestString(links){
@@ -75,7 +75,7 @@ function processLinks(e) {
       console.log("There is no match for this URL, contacting API.");
       
       var sReq = new XMLHttpRequest();
-      sReq.open("POST","https://datadogsanalytics.com/api/test/plugin-submit-url.php",true);
+      sReq.open("POST","https://datadogsanalytics.com/api/plugin-submit-url.php",true);
       sReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
       sReq.send("url="+url);
 
@@ -112,13 +112,13 @@ function createInfoBox(){
 function moveInfoBox(url,values,x,y){
   infoBox.innerHTML = "";
   infoBox.style.display = "block";
-  infoBox.innerHTML+=url+"<br>";
+  infoBox.innerHTML+=values.page_title+"<br>";
   infoBox.innerHTML+="<hr>";
   infoBox.innerHTML+="Page Score: "+values.page_score+"<br>";
-  infoBox.innerHTML+="Author Score: "+values.author_score+"<br>";
-  infoBox.innerHTML+="Site Score: "+values.site_score+"<br>";
+  infoBox.innerHTML+="Site Score: "+values.site_score+"%<br>";
   infoBox.style.left = x-75+"px";
   infoBox.style.top = y-120+"px";
+  infoBox.style.zIndex ="999999999";
   console.log("HERE");
 }
 console.log("END");
