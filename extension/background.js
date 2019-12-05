@@ -1,5 +1,5 @@
 console.log("Background");
-
+/*
 function handleMessage(request, sender, sendResponse) {
 	var responseObject = null;
 	var httpRequest = new XMLHttpRequest();
@@ -28,6 +28,30 @@ function handleMessage(request, sender, sendResponse) {
 	//Not currently in use, but keep it.
 	//sendResponse(responseObject);
 }
+*/
+browser.menus.create({
+  id: "explore-link",
+  title: "Explore Link",
+  contexts: ["link"]
+}, onCreated);
+function onCreated(){
+  console.log("created");
+}
+browser.menus.onClicked.addListener(function(info,tab){
+  browser.sidebarAction.open();
+
+  browser.tabs.query({active: true, currentWindow: true}, function(tabs) {
+	var responseObject = new Object();
+	responseObject.context = "explore";
+	console.log(info);
+	responseObject.URL = info.linkUrl;
+    browser.tabs.sendMessage(tabs[0].id, responseObject, function() {
+	  console.log("Message sent to content script.");
+    });
+  });
+});
 
 
-browser.runtime.onMessage.addListener(handleMessage);
+
+
+//browser.runtime.onMessage.addListener(handleMessage);

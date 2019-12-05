@@ -12,9 +12,11 @@ function handleError(error) {
 }
 browser.runtime.onMessage.addListener(function(message){
   //linksObject = message;
-  Object.assign(linksObject, message);
+  //Object.assign(linksObject, message);
   console.log(message);
-  console.log(linksObject);
+  document.getElementById("sideBarTEST").innerHTML="@";
+
+  //console.log(linksObject);
 });
 
 function notifyBackgroundPage(e) {
@@ -65,6 +67,7 @@ function processLinks(e) {
   var url = e.target.href;
   url = url.split(/[&?#$]/);
   url = url[0];
+  currentURL = url;
   if(linksObject){
     console.log(url);
     if(linksObject[url]!=null){
@@ -73,7 +76,6 @@ function processLinks(e) {
     }else{
       //TODO: I'm going to make a direct call to the API here, I should use messages later
       console.log("There is no match for this URL, contacting API.");
-      
       var sReq = new XMLHttpRequest();
       sReq.open("POST","https://datadogsanalytics.com/api/plugin-submit-url.php",true);
       sReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -121,4 +123,5 @@ function moveInfoBox(url,values,x,y){
   infoBox.style.zIndex ="999999999";
   console.log("HERE");
 }
+
 console.log("END");

@@ -7,7 +7,7 @@
       "48": "icons/border-48.png"
     },
     "permissions":
-      ["<all_urls>"]
+      ["<all_urls>","menus"]
     ,
     "background":{
       "scripts":["background.js"]
@@ -18,6 +18,11 @@
         "js": ["main.js"]
       }
     ],
+    "sidebar_action": {
+    "default_title": "Explore Article",
+    "default_panel": "sidebar.html",
+    "default_icon": "sidebar_icon.png"
+	},
     "applications": {
         "gecko": {
           "id": "borderify@example.com"
