@@ -10,14 +10,6 @@ function handleResponse(message) {
 function handleError(error) {
   //console.log(`Error: ${error}`);
 }
-browser.runtime.onMessage.addListener(function(message){
-  //linksObject = message;
-  //Object.assign(linksObject, message);
-  console.log(message);
-  document.getElementById("sideBarTEST").innerHTML="@";
-
-  //console.log(linksObject);
-});
 
 function notifyBackgroundPage(e) {
   var sending = browser.runtime.sendMessage({
