@@ -20,7 +20,32 @@ function notifyBackgroundPage(e) {
 }
 
 window.onload = function(e){
+	// This gets called when the page loads
 	//notifyBackgroundPage(e);
+	
+	// Emumerate all links on the page
+	var links = document.getElementsByTagName("A");
+	console.log("links[] contains " + links.length + " items");
+	// Query API for each link in array
+	var i;
+	for (i = 0; i < links.length; i++)
+		queryAPI(links[i]);
+}
+
+function queryAPI (url) {
+    var sReq = new XMLHttpRequest();
+    sReq.open("POST","https://datadogsanalytics.com/api/plugin-submit-url.php",true);
+    sReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    console.log("Requesting from API:  " + url);
+    sReq.send("url="+url);
+  
+    sReq.onload = function(){
+        var newURL = "{\""+url+"\":"+this.responseText+"}";
+        //console.log(this.responseText);
+        newURL = JSON.parse(newURL);
+        Object.assign(linksObject,newURL);
+        console.log("Received from API:  " + this.responseText);
+  }
 }
 
 function buildRequestString(links){
@@ -31,7 +56,7 @@ function buildRequestString(links){
         string = string.split(/[&?#$]/);
         requestString.links.push(string[0]);
     }
-    console.log(requestString);
+    //console.log(requestString);
     return requestString;
 }
 /*
@@ -67,18 +92,7 @@ function processLinks(e) {
     if (linksObject[url] == null) {
       //TODO: I'm going to make a direct call to the API here, I should use messages later
       console.log("There is no match for this URL, contacting API.");
-      var sReq = new XMLHttpRequest();
-      sReq.open("POST","https://datadogsanalytics.com/api/plugin-submit-url.php",true);
-      sReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      sReq.send("url="+url);
-
-      sReq.onload = function(){
-        var newURL = "{\""+url+"\":"+this.responseText+"}";
-        console.log(this.responseText);
-        newURL = JSON.parse(newURL);
-        Object.assign(linksObject,newURL);
-        //console.log(this.responseText);
-      }
+	  queryAPI(url);
     }
   }
 }
@@ -151,8 +165,8 @@ function moveInfoBox(url,values,x,y){
   siteScore.style.margin = "0px";
   siteScore.style.padding = "0px";
   infoBox.appendChild(siteScore);
-  //infoBox.style.left = x-75 + "px";
-  //infoBox.style.top = y-60 + "px";
+  infoBox.style.left = x-75 + "px";
+  infoBox.style.top = y-60 + "px";
   infoBox.style.zIndex ="999999999";
 }
 
