@@ -51,6 +51,7 @@ for(var i = 0;i<domLinks.length;i++){
 */
 
 function processLinks(e) {
+  // This gets called by the mouseover event
   var e = window.e || e;
 
   if (e.target.tagName !== 'A'){
@@ -60,12 +61,10 @@ function processLinks(e) {
   url = url.split(/[&?#$]/);
   url = url[0];
   currentURL = url;
-  if(linksObject){
+  
+  if (linksObject) {
     console.log(url);
-    if(linksObject[url]!=null){
-      var linkScores = linksObject[url];
-      moveInfoBox(url,linkScores,e.pageX,e.pageY);
-    }else{
+    if (linksObject[url] == null) {
       //TODO: I'm going to make a direct call to the API here, I should use messages later
       console.log("There is no match for this URL, contacting API.");
       var sReq = new XMLHttpRequest();
@@ -81,15 +80,39 @@ function processLinks(e) {
         //console.log(this.responseText);
       }
     }
-    }
+  }
 }
 
-if (document.addEventListener)
+function mouseMoved(e) {
+  // This gets called by the mousemove event
+  var e = window.e || e;
+
+  if (e.target.tagName !== 'A'){
+    return;
+  }
+  var url = e.target.href;
+  url = url.split(/[&?#$]/);
+  url = url[0];
+
+  if (linksObject) {
+    console.log(url);
+    if (linksObject[url] != null) {
+      var linkScores = linksObject[url];
+      moveInfoBox(url,linkScores,e.pageX,e.pageY);
+	}
+  }
+}
+
+if (document.addEventListener) {
   document.addEventListener('mouseover', processLinks, false);
-else
+  document.addEventListener('mousemove', mouseMoved, false);
+} else {
   document.attachEvent('onmouseover', processLinks);
+  document.attachEvent('onmousemove', mouseMoved);
+}
 
 function createInfoBox(){
+  console.log("Creating infobox");
   var infoBox = document.createElement("div");
   //infoBox.style.width = "150px";
   infoBox.style.padding = "0px";
@@ -109,6 +132,7 @@ function createInfoBox(){
 function moveInfoBox(url,values,x,y){
   infoBox.innerHTML = "";
   infoBox.style.display = "block";
+  infoBox.style.padding = "10px";
   
   var title = document.createElement("p");
   title.innerHTML = values.page_title;
@@ -127,8 +151,8 @@ function moveInfoBox(url,values,x,y){
   siteScore.style.margin = "0px";
   siteScore.style.padding = "0px";
   infoBox.appendChild(siteScore);
-  //infoBox.style.left = x-75+"px";
-  //infoBox.style.top = y-120+"px";
+  //infoBox.style.left = x-75 + "px";
+  //infoBox.style.top = y-60 + "px";
   infoBox.style.zIndex ="999999999";
 }
 
