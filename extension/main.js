@@ -75,6 +75,7 @@ function processLinks(e) {
 
       sReq.onload = function(){
         var newURL = "{\""+url+"\":"+this.responseText+"}";
+        console.log(this.responseText);
         newURL = JSON.parse(newURL);
         Object.assign(linksObject,newURL);
         //console.log(this.responseText);
@@ -91,13 +92,15 @@ else
 function createInfoBox(){
   var infoBox = document.createElement("div");
   //infoBox.style.width = "150px";
-  infoBox.style.color = "darkslategray";
+  infoBox.style.padding = "0px";
+  infoBox.style.fontSize = "10";
+  infoBox.style.color = "white";
   //infoBox.style.height= "100px";
-  infoBox.style.backgroundColor = "white";
+  infoBox.style.backgroundImage = "linear-gradient(135deg,rgba(0,0,0,1),rgba(0,0,0,0.5) 70%)";
   infoBox.style.position = "absolute";
-  infoBox.style.border="1px darkslategray solid";
-  infoBox.style.left = 300+"px";
-  infoBox.style.top = 300+"px";
+  //infoBox.style.border="1px darkslategray solid";
+  infoBox.style.left = 0+"px";
+  infoBox.style.top = 0+"px";
   infoBox.style.display = "none";
   document.body.appendChild(infoBox);
   return infoBox;
@@ -106,14 +109,27 @@ function createInfoBox(){
 function moveInfoBox(url,values,x,y){
   infoBox.innerHTML = "";
   infoBox.style.display = "block";
-  infoBox.innerHTML+=values.page_title+"<br>";
-  infoBox.innerHTML+="<hr>";
-  infoBox.innerHTML+="Page Score: "+values.page_score+"<br>";
-  infoBox.innerHTML+="Site Score: "+values.site_score+"%<br>";
-  infoBox.style.left = x-75+"px";
-  infoBox.style.top = y-120+"px";
+  
+  var title = document.createElement("p");
+  title.innerHTML = values.page_title;
+  title.style.margin = "0px";
+  title.style.padding = "0px";
+  infoBox.appendChild(title);
+  
+  var pageScore = document.createElement("p");
+  pageScore.innerHTML = values.page_score;
+  pageScore.style.margin = "0px";
+  pageScore.style.padding = "0px";
+  infoBox.appendChild(pageScore);
+
+  var siteScore = document.createElement("p");
+  siteScore.innerHTML = values.site_score+"%";
+  siteScore.style.margin = "0px";
+  siteScore.style.padding = "0px";
+  infoBox.appendChild(siteScore);
+  //infoBox.style.left = x-75+"px";
+  //infoBox.style.top = y-120+"px";
   infoBox.style.zIndex ="999999999";
-  console.log("HERE");
 }
 
 console.log("END");
