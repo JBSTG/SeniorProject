@@ -4,7 +4,8 @@
     "version": "1.0",
     "description": "Warns about manipulative title descriptions.",
     "icons": {
-      "48": "icons/border-48.png"
+      "48": "icons/Data_Dogs_48.png",
+      "96": "icons/Data_Dogs_96.png"
     },
     "permissions":
       ["<all_urls>","menus"]
