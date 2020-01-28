@@ -43,10 +43,9 @@
     messageButton.addEventListener ("click", function() {
         var messageObject = new Object();
         messageObject.isUserMessage = true;
-        // NEED TO CHANGE THESE PARAMETERS TO MATCH THE NEW CHAT SYSTEM
-        messageObject.sender = document.getElementById("username").value;
+        messageObject.sender = sender;
+        messageObject.target = target;
         messageObject.body = message.value;
-        messageObject.session = session;
         connection.send(JSON.stringify(messageObject));
     });
 

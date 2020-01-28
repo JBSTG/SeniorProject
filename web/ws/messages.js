@@ -41,13 +41,12 @@ wss.on('connection', function connection(ws, request, client) {
             var chatMessage = new Object();
             chatMessage.isUserMessage = true;
             chatMessage.sender = "System";
-            chatMessage.body = "Successfully connected!";
+            chatMessage.body = "Connected to chat subsystem.";
             ws.send(JSON.stringify(chatMessage));
             console.log("    Sent welcome message to client");
 
-            // Fetch and send chat log history to client
+            // Fetch and send chat log history to client (uses stored procedure in database)
             var sqlquery = "CALL FetchMessages('" + messageObject.sender + "','" + messageObject.target + "');";
-            console.log("Running:  " + sqlquery);
             con.query(sqlquery, function (err, result) {
                 if (err) throw err;
                 result[0].forEach(row => {
@@ -55,7 +54,6 @@ wss.on('connection', function connection(ws, request, client) {
                     chatMessage.sender = row.Sender;
                     chatMessage.body = row.message;
                     chatMessage.timestamp = row.sent_at;
-                    console.log("Sending:  " + row.Sender + " --> " + row.Target + " : " + row.message);
                     ws.send(JSON.stringify(chatMessage));
                 });
             });
@@ -65,10 +63,8 @@ wss.on('connection', function connection(ws, request, client) {
         if (messageObject.isUserMessage === true) {
             console.log("User chat message received from '" + messageObject.sender + "'");
 
-            // Insert user chat message to database
-            // NEED TO UPDATE THIS QUERY
-            const sqlquery = "INSERT INTO chat (Session,Sender,Message) VALUES (" + session_number + ",'" + messageObject.sender + "','" + messageObject.body + "')";
-            //console.log("Executing:  " + sqlquery);
+            // Insert user chat message to database (uses stored procedure in database)
+            var sqlquery = "CALL SendMessage('" + messageObject.sender + "', '" + messageObject.target + "','" + messageObject.body + "')";
             con.query(sqlquery, function (err, result) {
                 if (err) throw err;
                 console.log("Result: " + result);
