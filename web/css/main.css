@@ -1,0 +1,140 @@
+@font-face {
+    font-family: 'timeless';
+    src: url('Timeless.ttf');
+}
+html,
+body {
+    background-color: #1d3461;
+    height: 100%;
+    color:darkslategray;
+    font-family: "timeless";
+}
+img.scoreIcon{
+   height:11px; 
+}
+.logo {
+    margin:0px auto;
+    width: 100%;
+}
+.def-prof-pic {
+    width: 100%;
+}
+.log-out{
+    background-color:#eaecf0;
+    border: 0px;
+    color:#1d3461;
+    width: 100%;
+}
+#loadingGif{
+    height:30px;
+    visibility:hidden;
+}
+.Body-box {
+    overflow-y:auto;
+    height: auto;
+    min-height: 300px;
+    max-height: 300px;
+    background-color:#eaecf0;
+    opacity: .9;
+    color:darkslategray;
+    padding: 10px;
+}
+
+.Stats-box {
+    overflow-y:auto;
+    height: auto;
+    min-height: 50px;
+    max-height: 100px;
+    background-color:#eaecf0;
+    opacity: .9;
+    color:darkslategray;
+    padding: 10px;
+}
+
+
+#scrapeButton{
+    color:#1d3461;
+    background-color:#eaecf0;
+    border:1px #1d3461 solid;
+    height: 30px;
+}
+#search{
+    color:#1d3461;
+    background-color:white;
+    border:1px #1d3461 solid;
+    height: 30px;
+}
+.mainNavBar{
+    text-align: center;
+}
+.mainNavBarItem{
+    padding: 0px;
+}
+.mainNavBarItem a{
+    color: white;
+}
+
+.mainNavBarItem a:visited{
+    color: white;
+}
+.mainNavBarItem a:hover{
+    text-decoration: none;
+    color: wheat;
+}
+.follow-count{
+    color:white;
+}
+.follow-count:hover{
+    color:blue;
+}
+html,
+body {
+    background-color: #1d3461;
+    height: 100%;
+}
+.prof-container {
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    border:1px gray solid;
+}
+.def-prof-pic {
+    width: 100%;
+}
+.col{
+    border:1px black solid;
+}
+.log-out{
+    margin-top:40px;
+}
+
+.bio {
+    background-color: white;
+    width: 250px;
+    margin-top:40px;
+    border-radius: 10px;
+    padding: 10px;
+}
+.moreInfoButton{
+    border:none;
+}
+
+#modalBg{
+    width:100%;
+    height:100%;
+    position:absolute;
+    text-align:center;
+    z-index:111;
+    background-color:rgba(0,0,0,0.5);
+    display:none;
+}
+#infoModal{
+    display:inline-block;
+    text-align:left;
+    width:500px;
+    background-color:white;
+    border-radius:2px;
+}
+#articleView{
+    display:none;
+}
