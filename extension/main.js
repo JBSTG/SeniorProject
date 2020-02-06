@@ -147,21 +147,31 @@ function moveInfoBox(url,values,x,y){
   infoBox.innerHTML = "";
   infoBox.style.display = "block";
   infoBox.style.padding = "10px";
-  
+
+  // Page title  
   var title = document.createElement("p");
-  title.innerHTML = values.page_title;
+  if (values.page_title.length > 0)
+    title.innerHTML = "<a href='" + url + "'><font color=white>" + values.page_title + "</font></a>";
+  else
+	  title.innerHTML = "<a href='" + url + "'><font color=white>" + url + "</font></a>";
+
   title.style.margin = "0px";
   title.style.padding = "0px";
   infoBox.appendChild(title);
-  
+
+  // Page score from API  
   var pageScore = document.createElement("p");
-  pageScore.innerHTML = values.page_score;
+  if (values.page_score == "0") 
+    pageScore.innerHTML = "Page Reputation:  Good";
+  else if(values.page_score == "1")
+	pageScore.innerHTML = "Page Reputation:  Bad";
   pageScore.style.margin = "0px";
   pageScore.style.padding = "0px";
   infoBox.appendChild(pageScore);
 
+  // Site score from API
   var siteScore = document.createElement("p");
-  siteScore.innerHTML = values.site_score+"%";
+  siteScore.innerHTML = "Site Score:  " + values.site_score+"%";
   siteScore.style.margin = "0px";
   siteScore.style.padding = "0px";
   infoBox.appendChild(siteScore);
