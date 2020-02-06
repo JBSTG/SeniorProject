@@ -4,6 +4,7 @@ var x = document.links.length;
 var data = buildRequestString(x);
 var linksObject = new Object();
 var infoBox = createInfoBox();
+var isBoxDynamic = 1;
 function handleResponse(message) {
   //console.log(message);
 }
@@ -175,9 +176,37 @@ function moveInfoBox(url,values,x,y){
   siteScore.style.margin = "0px";
   siteScore.style.padding = "0px";
   infoBox.appendChild(siteScore);
-  infoBox.style.left = x-75 + "px";
-  infoBox.style.top = y-60 + "px";
+
   infoBox.style.zIndex ="999999999";
+  if(isBoxDynamic){
+    infoBox.style.left = x-75 + "px";
+    infoBox.style.top = y-60 + "px";
+    infoBox.style.position = "absolute";
+
+  }else{
+    infoBox.style.left="0px";
+    infoBox.style.top="0px";
+    infoBox.style.position = "fixed";
+  }
 }
+
+
+function handleMessage(request, sender, sendResponse) {
+  if(request.context=="toggle"){
+    isBoxDynamic^=1;
+
+    if(!isBoxDynamic){
+      infoBox.style.left="0px";
+      infoBox.style.top="0px";
+      infoBox.style.position = "fixed";
+    }
+
+
+
+    console.log(isBoxDynamic);
+  }
+}
+browser.runtime.onMessage.addListener(handleMessage);
+
 
 console.log("END");

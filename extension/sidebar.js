@@ -1,4 +1,5 @@
 function handleMessage(request, sender, sendResponse) {
+  if(request.context=="explore"){
     var url = request.URL;
     var sReq = new XMLHttpRequest();
     sReq.open("POST","https://datadogsanalytics.com/api/plugin-submit-url.php",true);
@@ -14,5 +15,6 @@ function handleMessage(request, sender, sendResponse) {
       //console.log(newURL);
       //console.log(this.responseText);
     }
+  }
 }
 browser.runtime.onMessage.addListener(handleMessage);

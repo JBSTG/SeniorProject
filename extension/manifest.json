@@ -19,6 +19,14 @@
         "js": ["main.js","sidebar.js"]
       }
     ],
+    "commands": {
+      "toggle-feature": {
+        "suggested_key": {
+          "default": "Alt+Shift+0"
+        },
+        "description": "Switch modes for the pop-up"
+      }
+    },
     "sidebar_action": {
     "default_title": "Explore Article",
     "default_panel": "sidebar.html",

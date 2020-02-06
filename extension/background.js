@@ -52,4 +52,17 @@ browser.menus.onClicked.addListener(function(info,tab){
 	browser.runtime.sendMessage(responseObject);
   });
 });
+browser.commands.onCommand.addListener(function (command) {
+	if (command === "toggle-feature") {
+		browser.tabs.query({active: true, currentWindow: true}, function(tabs) {
+			var responseObject = new Object();
+			responseObject.context = "toggle";
+			
+			browser.tabs.sendMessage(tabs[0].id, responseObject, function() {
+			  //console.log("Toggling position.");
+			});
+			//browser.runtime.sendMessage(responseObject);
+		  });
+	}
+  });
 //browser.runtime.onMessage.addListener(handleMessage);
