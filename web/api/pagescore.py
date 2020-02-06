@@ -2,25 +2,11 @@ from urllib.request import urlparse, urljoin
 from bs4 import BeautifulSoup
 from collections import deque
 import requests
-import requests.exceptions
-import subprocess
 import argparse
 import signal
-import logging
 import re
 import sys
 import os
-
-class TimeoutException(Exception):
-    pass
-
-def timeout_handler(signum, frame):
-    raise TimeoutException
-
-signal.signal(signal.SIGALRM, timeout_handler)
-
-formatter = logging.Formatter("%(asctime)s-%(levelname)s-%(process)s-%(message)s")
-# url for testing: "https://scrapethissite.com/"
 
 # set default score
 score = 0.0
@@ -37,7 +23,6 @@ def is_valid(url):
     """
     parsed = urlparse(url)
     return bool(parsed.netloc) and bool(parsed.scheme)
-
 
 def get_all_website_links(url):
     """
@@ -75,13 +60,10 @@ def get_all_website_links(url):
         internal_urls.add(href)
     return urls
 
-
 def crawl(url, max_urls):
     """
     Crawls a web page and extracts all links.
     You'll find all links in `external_urls` and `internal_urls` global set variables.
-    params:
-        max_urls (int): number of max urls to crawl, default is 10.
     """
     global total_urls_visited
     total_urls_visited += 1
@@ -109,33 +91,9 @@ def main(argv):
     domain = args.domain
     for i in range(1):
         signal.alarm(10)
-        try:
-            # start page rank process
-            score = crawl(domain, max_urls=1)
-            print("Score:", round(score, 2))
-        except TimeoutException as e:
-            formatter = logging.Formatter("%(asctime)s-%(levelname)s-%(process)s-%(message)s")
-            # error logger
-            error_logger = setup_logger("error_logger", "./logs/datadogs_pagescore_error_logfile.log")
-            error_logger.info("Error occurred")
-
-            # exception error logger
-            exception_logger = setup_logger("exception_logger", "./logs/datadogs_pagescore_exception_logfile.log")
-            exception_logger.exception("Timeout exception occurred")
-
-            continue
-        else:
-            signal.alarm(0)
-
-def setup_logger(name, log_file, level=logging.INFO):
-    handler = logging.FileHandler(log_file)
-    handler.setFormatter(formatter)
-
-    logger = logging.getLogger(name)
-    logger.setLevel(level)
-    logger.addHandler(handler)
-
-    return logger
+        # start page rank process
+        score = crawl(domain, max_urls=1)
+        print("Score:", round(score, 2))
 
 if __name__ == "__main__":
     main(sys.argv[1:])
