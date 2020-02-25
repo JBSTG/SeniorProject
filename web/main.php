@@ -51,7 +51,7 @@ if(!isset($_SESSION["username"])){
           <!-- The Grid -->
             <div class="w3-row">
               <!-- Left Column -->
-                <div class="w3-col m3">
+                <div class="w3-col m4 l3">
                   <!-- Profile -->
                   <div class="w3-card w3-round w3-white">
                     <div class="w3-container">
@@ -62,7 +62,7 @@ if(!isset($_SESSION["username"])){
                       </p>
                       <h6 class="w3-center"><?php echo $_SESSION['username']?></h6>
                       <hr>
-                      <a href="" onclick="open_home(); return false;">
+                      <a href="main.php" onclick="open_home(); return false;">
                         <p><i class="fa fa-home fa-fw w3-margin-right w3-text-theme"></i>Home</p></a>
                       <a href="" onclick="open_profile(); return false;"><p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-text-theme"></i>My Profile</p></a>
                       <a href="logoff.php"><p><i class="fa fa-sign-out fa-fw w3-margin-right w3-text-theme"></i>Log Off</p></a>
@@ -93,6 +93,8 @@ if(!isset($_SESSION["username"])){
                     var statsView = document.getElementById("statsView");
                     var search = document.getElementById("search");
                     var scrapeButton = document.getElementById("scrapeButton");
+                    var nextButton = document.getElementById("nextPage");
+                    var prevButton = document.getElementById("prevPage");
 
                     var following = document.getElementById("following");
                     var follower = document.getElementById("follower");
@@ -104,6 +106,9 @@ if(!isset($_SESSION["username"])){
                     statsView.className="invis";
                     search.className="invis-search";
                     scrapeButton.className="invis-scrapeButton";
+                    nextButton.className="invis-scrapeButton";
+                    prevButton.className="invis-scrapeButton";
+
                     setTimeout(load_profile, 0500);
 
                     function load_profile() {
@@ -120,6 +125,8 @@ if(!isset($_SESSION["username"])){
                     var statsView = document.getElementById("statsView");
                     var search = document.getElementById("search");
                     var scrapeButton = document.getElementById("scrapeButton");
+                    var nextButton = document.getElementById("nextPage");
+                    var prevButton = document.getElementById("prevPage");
 
                     var following = document.getElementById("following");
                     var follower = document.getElementById("follower");
@@ -139,13 +146,18 @@ if(!isset($_SESSION["username"])){
                     function load_home() {
                         statsView.className="load";
                         search.className="load-search";
-                        scrapeButton.className="load-scrapeButton";
+                        search.classList.add("w3-border");
+                        search.classList.add("w3-padding");
+                        scrapeButton.className="load-scrapeButton w3-button w3-theme-l1";
+                        prevButton.className="load-scrapeButton w3-button w3-theme-l1";
+                        nextButton.className="load-scrapeButton w3-button w3-theme-l1";
+
                     }
                 }
               </script>
 
               <!-- Middle Coumn -->
-              <div class="w3-col m7">
+              <div class="w3-col m8 l9 w3-padding">
                 <div class="w3-row-padding">
                   <div class="w3-col m12">
                     <div class="w3-card w3-round w3-white">
@@ -157,7 +169,7 @@ if(!isset($_SESSION["username"])){
                             <p id="infoBoxSiteScore">Site:</p>
                             <p>Comments:</p>
                             <div id="infoBoxComments"></div>
-                            <button id="fromButton" class="">Return</button>
+                            <button id="fromButton" class="w3-button w3-theme-l1">Return</button>
                           </div>                                                    
                           <div class="bio-info-col">
                             <p class="start-prof-info bio" id="bio"><b>Bio:</b><br>
@@ -196,10 +208,12 @@ if(!isset($_SESSION["username"])){
                             ?>
                           </div><br>
                             
-                          <input class="w3 border w3-padding" type ="text" id="search" placeholder="Search for article"><br><br>
+                          <input class="w3-border w3-padding" type ="text" id="search" placeholder="Search for article"><br><br>
                           <button type="button" id="scrapeButton" class="w3-button w3-theme-l1">Search</button>
+                          <button id="prevPage" class="w3-button w3-theme-l1">Previous</button>
+                          <button id="nextPage" class="w3-button w3-theme-l1">Next</button>
                           <img src="Images/blue-loading-gif-transparent.gif" id="loadingGif"><hr>
-                          <p id="results"></p>
+                          <p id="results"></p><br>
                         </div>
                       </div>
                     </div>
@@ -216,14 +230,53 @@ if(!isset($_SESSION["username"])){
 <script>
     var searchbar = document.getElementById("search");
     var results = document.getElementById("results");
+    document.getElementById("prevPage").disabled = true;
+    document.getElementById("nextPage").disabled = true;
+    var currentPage = 0;
     var socket = new WebSocket("wss://www.datadogsanalytics.com:8080");
     socket.onopen = function(e) {
         console.log("Connected to websocket server.");
     }
-    socket.onmessage = function(e) {
-        console.log(e.data);
+
+    // Handle incoming scrape results
+    socket.onmessage = function(message) {
+        console.log("Received from Node.js backend:  " + message.data);
+        var msg = JSON.parse(message.data);
+        if (msg.isScrapeResult) {
+            // Pass returned JSON to appendScrapedPage
+            appendScrapedPage(msg);
+        }
     }
+
     searchbar.addEventListener("keyup",function() {
+        currentPage = 0;
+        document.getElementById("prevPage").disabled = true;
+        requestSearchResults(currentPage);       
+});
+
+
+document.getElementById("prevPage").addEventListener("click",function(){
+    if(currentPage==0){
+        document.getElementById("prevPage").disabled = true;
+    }else if(currentPage == 1){
+        document.getElementById("prevPage").disabled = true;
+        currentPage--;
+    }else{
+        currentPage--;    
+    }
+    document.getElementById("nextPage").disabled = false;
+    requestSearchResults(currentPage); 
+    console.log(currentPage);
+});
+
+document.getElementById("nextPage").addEventListener("click",function(){
+    currentPage++;
+    document.getElementById("prevPage").disabled = false;
+    requestSearchResults(currentPage); 
+    console.log(currentPage);
+});
+
+function requestSearchResults(page){
         var xhr = new XMLHttpRequest();
         xhr.open("POST","getSearchResults.php",true);
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -234,9 +287,18 @@ if(!isset($_SESSION["username"])){
             var resultArray = JSON.parse(this.responseText);
             if(resultArray.length==0) {
                 results.innerHTML="No results found.";
+                document.getElementById("nextPage").disabled = true;
             } else {
                 results.innerHTML="";
                 range = (resultArray.length>10)? 10:resultArray.length;
+                if(resultArray.length<10){
+                    document.getElementById("nextPage").disabled = true;
+                    console.log(resultArray.length);
+                }else{
+                    document.getElementById("nextPage").disabled = false;
+                }
+
+
                 for(var i = 0;i<range;i++){
                     if(resultArray.title!=""){
                         //console.log(resultArray[i]);
@@ -246,27 +308,8 @@ if(!isset($_SESSION["username"])){
             }
         }
         };
-        xhr.send("input="+searchbar.value);
-    });
-    
-    /*document.getElementById("scrapeButton").addEventListener("click",function(){
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST","scraper.php",true);
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        document.getElementById("loadingGif").style.visibility="visible";
-        xhr.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                //TODO:Change to prepend
-                document.getElementById("loadingGif").style.visibility="hidden";
-                console.log(this.responseText);
-                var output = JSON.parse(this.responseText);
-                for(var i = 0;i<output.length;i++){
-                    appendScrapedPage(output[i]);
-                }
-            }
-        };
-        xhr.send("domain="+searchbar.value);
-    });*/
+        xhr.send("input="+searchbar.value+"&page="+page);
+}
     
     document.getElementById("scrapeButton").addEventListener("click",function() {
         var scrapeMessage = new Object();
@@ -295,6 +338,7 @@ if(!isset($_SESSION["username"])){
         moreInfo.height = 32;
         linkToArticle.setAttribute("href",object.url);
         linkToArticle.innerHTML = "&nbsp;&nbsp;Visit Page";
+        linkToArticle.target = "_blank";
         domain.innerHTML = object.url;
         container.appendChild(title);
         container.appendChild(moreInfo);
