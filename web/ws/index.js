@@ -138,8 +138,14 @@ function crawlPage() {
         for (var i = 0; i < dom.window.document.querySelectorAll("a").length; i++) {
             var currentLink = dom.window.document.querySelectorAll("a")[i].toString();
 
+            // Strip any arguments in the URL
+            currentLink = currentLink.split("?")[0];
+
+            // Ignore non-HTML links
+            if (currentLink.startsWith("mailto:") || currentLink.endsWith(".gif") || currentLink.endsWith(".iso") || currentLink.endsWith(".jpeg") || currentLink.endsWith(".jpg") || currentLink.endsWith(".pdf") || currentLink.endsWith(".png") || currentLink.endsWith(".tar.gz") || currentLink.endsWith(".tar.xz") || currentLink.endsWith(".tgz") || currentLink.endsWith(".torrent") || currentLink.endsWith(".zip")) {
+
             // Handle absolute links
-            if (currentLink.startsWith("http://") || currentLink.startsWith("https://")) {
+            } else if (currentLink.startsWith("http://") || currentLink.startsWith("https://")) {
                 var newLink = currentLink;
                 // Strip trailing slash for consistency
                 if (newLink.endsWith("/")) { newLink = newLink.substr(0, newLink.length - 1); }
@@ -155,9 +161,6 @@ function crawlPage() {
                     crawlList.push(newLink);
                     crawledList.push(newLink);      // Mark as crawled (or to be crawled)
                 }
-
-            // Ignore non-HTML links
-            } else if (currentLink.startsWith("mailto:") || currentLink.endsWith(".gif") || currentLink.endsWith(".jpg") || currentLink.endsWith(".pdf") || currentLink.endsWith(".png")) {
 
             // Handle relative links pointing to a different folder
             } else if (currentLink.startsWith("/")) {
