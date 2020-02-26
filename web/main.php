@@ -319,10 +319,13 @@ function requestSearchResults(page){
     });
 
     function appendScrapedPage(object) {
-        if(object.page_title=="Website Unavailable (Exception Encountered)") { return; }
+        if (object.page_title == "Website Unavailable (Exception Encountered)") { return; }
         var container = document.createElement("div");
         container.setAttribute("id",object.url);
-        var title= document.createElement("p");
+        // Alternate background colors
+        container.setAttribute("style","background-color: #f2f2f2;");
+
+        var title = document.createElement("p");
         var linkToArticle = document.createElement("a");
         var moreInfo = document.createElement("img");
         moreInfo.addEventListener("click",function(e){
@@ -332,6 +335,7 @@ function requestSearchResults(page){
         });
     
         var domain = document.createElement("p");
+        title.setAttribute("style", "font-weight: bold;");
         title.innerHTML = object.page_title;
         moreInfo.src = "domainIcon.php?url='" + object.url + "'";
         moreInfo.width = 32;
