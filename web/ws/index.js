@@ -91,8 +91,12 @@ function scorePage() {
     console.log("    Want to score the URL:  " + URL);
 
     console.log("      Executing:  plugin-submit-url.php url=" + URL);
+    // Clean URL for exec()
+    var cleanURL = URL.replace("(", "\\(");
+    cleanURL = cleanURL.replace(")", "\\)");
+
     // Score page and wait for result
-    exec("php /var/www/html/api/plugin-submit-url.php url=" + URL, function (error, stdout, stderr) {
+    exec("php /var/www/html/api/plugin-submit-url.php url=" + cleanURL, function (error, stdout, stderr) {
         //console.log("      PHP completed: " + stdout);
         console.log("      Result received from API");
         // Write result to websocket
