@@ -4,8 +4,6 @@ import random
 import re
 import requests
 import sys
-import eventlet
-eventlet.monkey_patch()
 
 class Word:
     content = ""
@@ -95,18 +93,17 @@ class DocumentManager:
 
 
 def getTitleFromURL(url):
-    with eventlet.Timeout(10):
-        try:
-            r = requests.get(url, timeout=5)
-        except:
-            return "Website Unavailable (Exception Encountered)"
-        if r.status_code != 200:
-            return "Website Unavailable"
-    
-        tree = fromstring(r.content)
-        # article title
-        title = tree.findtext(".//title")
-        return title
+    try:
+        r = requests.get(url, timeout=3)
+    except:
+        return "Website Unavailable (Exception Encountered)"
+    if r.status_code != 200:
+        return "Website Unavailable"
+
+    tree = fromstring(r.content)
+    # article title
+    title = tree.findtext(".//title")
+    return title
 
 # look for title in csv file and return score if
 # available, else return -1
@@ -150,16 +147,15 @@ def percent_match(regex, target):
 
 # function will grab title and all links in url
 def grabURL(url,lineItems):
-    with eventlet.Timeout(10):
-        r = requests.get(url, timeout=5)
-        tree = fromstring(r.content)
-        # article title
-        title = tree.findtext(".//title")
-        # list of links in url
-        ahref = tree.xpath("//a/@href")
-        # call function to check for title
-        check_title(title,lineItems)
-        # prints article title
-        print("Title:", title, "\n")
-        # prints list of links in url
-        print(ahref)
+    r = requests.get(url, timeout=3)
+    tree = fromstring(r.content)
+    # article title
+    title = tree.findtext(".//title")
+    # list of links in url
+    ahref = tree.xpath("//a/@href")
+    # call function to check for title
+    check_title(title,lineItems)
+    # prints article title
+    print("Title:", title, "\n")
+    # prints list of links in url
+    print(ahref)
