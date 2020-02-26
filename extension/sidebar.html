@@ -5,22 +5,25 @@
 		<style>
 		#pageTitle{
 			text-decoration: underline;
-			text-align: center;
-			color: darkslategray;
-
 		}
-		#pageScore{
-			color: darkslategray;
-		}
-		#siteScore{
-			color: darkslategray;
+		#commentsHeader{
+			visibility:hidden;
 		}
 		</style>
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue.css">
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	</head>
 	<body>
-		<p id="pageTitle"></p>
-		<p id="pageScore"></p>
-		<p id="siteScore"></p>
+		<div class="w3-container w3-text-white"><p id="pageTitle"></p></div>
+		<div class="w3-container w3-text-blue-gray"><p id="pageScore"></p></div>
+		<div class="w3-container w3-text-blue-gray"><p id="siteScore"></p></div>
+		
+		
+		<div class="w3-container w3-text-blue-gray"><p id="commentsHeader">Comments:</p></div>
+		<div id="comments">
+		</div>
 	</body>
 	<script src="sidebar.js">
 	</script>
