@@ -9,6 +9,8 @@ function parseDomain($url)
     }
 
     // Handle a couple of special cases here (i.e. treat news.google.com as itself rather than google.com
+    if ($domain == "cs.csub.edu") return $domain;
+    if ($domain == "cs.csubak.edu") return $domain;
     if ($domain == "news.google.com") return $domain;
     if ($domain == "www.cs.csubak.edu") return "cs.csubak.edu";
     if ($domain == "www.cs.csub.edu") return "cs.csub.edu";
