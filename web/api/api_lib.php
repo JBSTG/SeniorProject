@@ -10,6 +10,8 @@ function parseDomain($url)
 
     // Handle a couple of special cases here (i.e. treat news.google.com as itself rather than google.com
     if ($domain == "news.google.com") return $domain;
+    if ($domain == "www.cs.csubak.edu") return "cs.csubak.edu";
+    if ($domain == "www.cs.csub.edu") return "cs.csub.edu";
 
     // For all other sites, return only the second- and first-level portions of the domain name (i.e. cnn.com)
     $domainparts = explode(".", $domain);
@@ -70,6 +72,7 @@ function getSiteScore($url)
             $cmd = "python3 /var/www/html/api/analyzer.py $url";
             //print "Running:  $cmd<p>";
             exec($cmd, $output);
+            //print "Exec() finished";
             @$pagescore = $output[0];
             @$pagetitle = $output[1];
 
