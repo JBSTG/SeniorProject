@@ -337,7 +337,7 @@ function requestSearchResults(page){
         var domain = document.createElement("p");
         title.setAttribute("style", "font-weight: bold;");
         title.innerHTML = object.page_title;
-        moreInfo.src = "domainIcon.php?url='" + object.url + "'";
+        moreInfo.src = "domainIcon.php?url=" + object.url + "";
         moreInfo.width = 32;
         moreInfo.height = 32;
         linkToArticle.setAttribute("href",object.url);
