@@ -13,6 +13,8 @@ const { JSDOM } = jsdom;
 var request = require('request');
 const { spawn, exec } = require('child_process');
 
+var maxDepth = 1;       // Maximum depth that a crawl can go
+
 var crawlList = [];     // Array of URLs to be crawled
 var scoreList = [];     // Array of URLs to be scored
 var crawledList = [];   // Array of URLs we have already crawled (not to be crawled again)
@@ -52,9 +54,15 @@ wss.on('connection', function connection(ws) {
             console.log("Received incoming scrape request for domain: " + url);
             // Add the requested URL to our scoring list
             scoreList.push(url);
+            scoredList.push(url);
 
             // Add the requested URL to our crawling list
-            crawlList.push(url);
+            var target = new Object();
+            target.url = url;
+            target.depth = 0;
+            crawlList.push(target);
+            crawledList.push(url);
+
             // Start servicing the scoring and crawling queues
             serviceQueues();
         }
@@ -121,17 +129,22 @@ function scorePage() {
 
 function crawlPage() {
     activeCrawling = true;      // Set flag
-    var URL = crawlList.pop();
-    console.log("    Want to crawl the URL:  " + URL);
+    var target = crawlList.pop();
+    console.log("    Want to crawl the URL:  " + target.url + ", depth = " + target.depth);
+
+    // If depth > maxDepth, don't crawl it
+    //if (target.depth > maxDepth) {
+    //    console.log("      Not crawling because it exceeds the maximum crawl depth");
+    //    activeCrawling = false;     // Unset flag
+    //    serviceQueues();
+    //    return;
+    //}
 
     // Determine domain name
-    domain = URL.split("/")[0] + "//" + URL.split("/")[2];
-
-    // Mark URL as crawled
-    //crawledList.push(URL);
+    domain = target.url.split("/")[0] + "//" + target.url.split("/")[2];
 
     // Fetch HTML
-    request(URL, function(error, response, body) {
+    request(target.url, function(error, response, body) {
         console.log("      " + body.length + " bytes fetched");
         const dom = new JSDOM(body);
         console.log("      " + dom.window.document.querySelectorAll("a").length + " anchor elements found");
@@ -142,7 +155,7 @@ function crawlPage() {
             currentLink = currentLink.split("?")[0];
 
             // Ignore non-HTML links
-            if (currentLink.startsWith("mailto:") || currentLink.endsWith(".gif") || currentLink.endsWith(".iso") || currentLink.endsWith(".jpeg") || currentLink.endsWith(".jpg") || currentLink.endsWith(".pdf") || currentLink.endsWith(".png") || currentLink.endsWith(".tar.gz") || currentLink.endsWith(".tar.xz") || currentLink.endsWith(".tgz") || currentLink.endsWith(".torrent") || currentLink.endsWith(".zip")) {
+            if (currentLink.startsWith("mailto:") || currentLink.endsWith(".gif") || currentLink.endsWith(".iso") || currentLink.endsWith(".jpeg") || currentLink.endsWith(".jpg") || currentLink.endsWith(".msi") || currentLink.endsWith(".pdf") || currentLink.endsWith(".png") || currentLink.endsWith(".tar.gz") || currentLink.endsWith(".tar.xz") || currentLink.endsWith(".tgz") || currentLink.endsWith(".torrent") || currentLink.endsWith(".zip")) {
 
             // Handle absolute links
             } else if (currentLink.startsWith("http://") || currentLink.startsWith("https://")) {
@@ -158,8 +171,14 @@ function crawlPage() {
                 // Add link to crawling queue unless we've already crawled it
                 if (!crawledList.contains(newLink)) {
                     console.log("      Adding URL " + newLink + " to crawling queue");
-                    crawlList.push(newLink);
-                    crawledList.push(newLink);      // Mark as crawled (or to be crawled)
+                    // Add the URL to our crawling list
+                    var newTarget = new Object();
+                    newTarget.url = newLink;
+                    newTarget.depth = target.depth + 1;
+                    if (newTarget.depth <= maxDepth) {
+                        crawlList.push(newTarget);
+                        crawledList.push(newLink);      // Mark as crawled (or to be crawled)
+                    }
                 }
 
             // Handle relative links pointing to a different folder
@@ -176,8 +195,14 @@ function crawlPage() {
                 // Add link to crawling queue unless we've already crawled it
                 if (!crawledList.contains(newLink)) {
                     console.log("      Adding URL " + newLink + " to crawling queue");
-                    crawlList.push(newLink);
-                    crawledList.push(newLink);      // Mark as crawled (or to be crawled)
+                    // Add the URL to our crawling list
+                    var newTarget = new Object();
+                    newTarget.url = newLink;
+                    newTarget.depth = target.depth + 1;
+                    if (newTarget.depth <= maxDepth) {
+                        crawlList.push(newTarget);
+                        crawledList.push(newLink);      // Mark as crawled (or to be crawled)
+                    }
                 }
 
             // Handle relative links pointing to the same folder
@@ -194,8 +219,14 @@ function crawlPage() {
                 // Add link to crawling queue unless we've already crawled it
                 if (!crawledList.contains(newLink)) {
                     console.log("      Adding URL " + newLink + " to crawling queue");
-                    crawlList.push(newLink);
-                    crawledList.push(newLink);      // Mark as crawled (or to be crawled)
+                    // Add the URL to our crawling list
+                    var newTarget = new Object();
+                    newTarget.url = newLink;
+                    newTarget.depth = target.depth + 1;
+                    if (newTarget.depth <= maxDepth) {
+                        crawlList.push(newTarget);
+                        crawledList.push(newLink);      // Mark as crawled (or to be crawled)
+                    }
                 }
             }
         }
