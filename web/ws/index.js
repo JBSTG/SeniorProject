@@ -132,14 +132,6 @@ function crawlPage() {
     var target = crawlList.pop();
     console.log("    Want to crawl the URL:  " + target.url + ", depth = " + target.depth);
 
-    // If depth > maxDepth, don't crawl it
-    //if (target.depth > maxDepth) {
-    //    console.log("      Not crawling because it exceeds the maximum crawl depth");
-    //    activeCrawling = false;     // Unset flag
-    //    serviceQueues();
-    //    return;
-    //}
-
     // Determine domain name
     domain = target.url.split("/")[0] + "//" + target.url.split("/")[2];
 
@@ -156,6 +148,9 @@ function crawlPage() {
 
             // Ignore non-HTML links
             if (currentLink.startsWith("mailto:") || currentLink.endsWith(".gif") || currentLink.endsWith(".iso") || currentLink.endsWith(".jpeg") || currentLink.endsWith(".jpg") || currentLink.endsWith(".msi") || currentLink.endsWith(".pdf") || currentLink.endsWith(".png") || currentLink.endsWith(".tar.gz") || currentLink.endsWith(".tar.xz") || currentLink.endsWith(".tgz") || currentLink.endsWith(".torrent") || currentLink.endsWith(".zip")) {
+
+            // Ignore links containing javascript
+            } else if (currentLink.includes("javascript:")) {
 
             // Handle absolute links
             } else if (currentLink.startsWith("http://") || currentLink.startsWith("https://")) {
