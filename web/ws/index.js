@@ -175,12 +175,12 @@ function crawlPage() {
                     }
                     // Add link to crawling queue unless we've already crawled it
                     if (!crawledList.contains(newLink)) {
-                        console.log("      Adding URL " + newLink + " to crawling queue");
                         // Add the URL to our crawling list
                         var newTarget = new Object();
                         newTarget.url = newLink;
                         newTarget.depth = target.depth + 1;
                         if (newTarget.depth <= maxDepth) {
+                            console.log("      Adding URL " + newLink + " to crawling queue");
                             crawlList.push(newTarget);
                             crawledList.push(newLink);      // Mark as crawled (or to be crawled)
                         }
@@ -194,18 +194,18 @@ function crawlPage() {
                     if (newLink.endsWith("/")) { newLink = newLink.substr(0, newLink.length - 1); }
                     // Add link to scoring queue unless we've already scored it
                     if (!scoredList.contains(newLink)) {
-                    console.log("      Adding URL " + newLink + " to scoring queue");
+                        console.log("      Adding URL " + newLink + " to scoring queue");
                         scoreList.push(newLink);
                         scoredList.push(newLink);       // Mark as scored (or to be scored)
                     }
                     // Add link to crawling queue unless we've already crawled it
                     if (!crawledList.contains(newLink)) {
-                        console.log("      Adding URL " + newLink + " to crawling queue");
                         // Add the URL to our crawling list
                         var newTarget = new Object();
                         newTarget.url = newLink;
                         newTarget.depth = target.depth + 1;
                         if (newTarget.depth <= maxDepth) {
+                            console.log("      Adding URL " + newLink + " to crawling queue");
                             crawlList.push(newTarget);
                             crawledList.push(newLink);      // Mark as crawled (or to be crawled)
                         }
@@ -224,12 +224,12 @@ function crawlPage() {
                     }
                     // Add link to crawling queue unless we've already crawled it
                     if (!crawledList.contains(newLink)) {
-                        console.log("      Adding URL " + newLink + " to crawling queue");
                         // Add the URL to our crawling list
                         var newTarget = new Object();
                         newTarget.url = newLink;
                         newTarget.depth = target.depth + 1;
                         if (newTarget.depth <= maxDepth) {
+                            console.log("      Adding URL " + newLink + " to crawling queue");
                             crawlList.push(newTarget);
                             crawledList.push(newLink);      // Mark as crawled (or to be crawled)
                         }
@@ -248,12 +248,12 @@ function crawlPage() {
                     }
                     // Add link to crawling queue unless we've already crawled it
                     if (!crawledList.contains(newLink)) {
-                        console.log("      Adding URL " + newLink + " to crawling queue");
                         // Add the URL to our crawling list
                         var newTarget = new Object();
                         newTarget.url = newLink;
                         newTarget.depth = target.depth + 1;
                         if (newTarget.depth <= maxDepth) {
+                            console.log("      Adding URL " + newLink + " to crawling queue");
                             crawlList.push(newTarget);
                             crawledList.push(newLink);      // Mark as crawled (or to be crawled)
                         }
