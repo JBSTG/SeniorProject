@@ -78,11 +78,12 @@ function getSiteScore($url)
             @$pagescore = $output[0];
             @$pagetitle = $output[1];
 
-            // Update database with new score
+            // Update database with new score if page was found
             $domain = parseDomain($url);
             $currentdate = date("Y-m-d H:i:s");
             $query = "REPLACE INTO pages (URL, Domain, Page_Score, Last_Analyzed, Title) VALUES ('$url', '$domain', $pagescore, '$currentdate', '$pagetitle')";
-            mysqli_query($link, $query);
+            if ($pagetitle != "Website Unavailable")
+              mysqli_query($link, $query);
 
             // Return the page score from analyzer.py
             return $pagescore;
@@ -95,13 +96,14 @@ function getPageTitle($url){
     mysqli_select_db($link, "analytics") or die("Could not select database\n");
   
     $query = "SELECT Title FROM pages WHERE URL = '$url'";
-    $res = $link->query($query); 
+    $result = mysqli_query($link, $query);
+    $numrows = mysqli_num_rows($result);
 
-    if($res!=false){
-       $row = $res->fetch_assoc(); 
-        return $row["Title"];
-    }else{
-        return "--ERROR--: TITLE NOT FOUND";
+    if ($numrows > 0) {
+        $row = mysqli_fetch_row($result); 
+        return $row[0];
+    } else {
+        return "Website Unavailable";
     }
 }
 

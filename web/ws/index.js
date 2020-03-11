@@ -106,11 +106,11 @@ function scorePage() {
     // Score page and wait for result
     exec("php /var/www/html/api/plugin-submit-url.php url=" + cleanURL, function (error, stdout, stderr) {
         //console.log("      PHP completed: " + stdout);
-        console.log("      Result received from API");
+        console.log("      Result received from API:" + stdout);
         // Write result to websocket
         var apiResult = JSON.parse(stdout);
         wss.clients.forEach(function each(client) {
-            if (client.readyState === WebSocket.OPEN) {     // TODO: ADD DOMAIN BACK IN HERE
+            if (client.readyState === WebSocket.OPEN && !(apiResult.page_title === "Website Unavailable")) {     // TODO: ADD DOMAIN BACK IN HERE
                 var result = new Object();
                 result.isScrapeResult = true;
                 result.url = apiResult.url;
