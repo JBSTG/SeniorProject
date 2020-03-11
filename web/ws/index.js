@@ -142,15 +142,23 @@ function crawlPage() {
         console.log("      " + dom.window.document.querySelectorAll("a").length + " anchor elements found");
         for (var i = 0; i < dom.window.document.querySelectorAll("a").length; i++) {
             var currentLink = dom.window.document.querySelectorAll("a")[i].toString();
+            var currentLinkDomain = currentLink.split("/")[0] + "//" + currentLink.split("/")[2];
 
             // Strip any arguments in the URL
             currentLink = currentLink.split("?")[0];
+
+            // Strip any anchors in the URL
+            currentLink = currentLink.split("#")[0];
 
             // Ignore non-HTML links
             if (currentLink.startsWith("mailto:") || currentLink.endsWith(".gif") || currentLink.endsWith(".iso") || currentLink.endsWith(".jpeg") || currentLink.endsWith(".jpg") || currentLink.endsWith(".msi") || currentLink.endsWith(".pdf") || currentLink.endsWith(".png") || currentLink.endsWith(".tar.gz") || currentLink.endsWith(".tar.xz") || currentLink.endsWith(".tgz") || currentLink.endsWith(".torrent") || currentLink.endsWith(".zip")) {
 
             // Ignore links containing javascript
             } else if (currentLink.includes("javascript:")) {
+
+            // Ignore links to other sites
+            } else if (currentLink.startsWith("http") && !(domain === currentLinkDomain)) {
+                console.log("      Ignoring offiste link:  " + currentLink);
 
             // Handle absolute links
             } else if (currentLink.startsWith("http://") || currentLink.startsWith("https://")) {
