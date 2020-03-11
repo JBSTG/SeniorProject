@@ -151,6 +151,10 @@ function crawlPage() {
                 // Strip any anchors in the URL
                 currentLink = currentLink.split("#")[0];
 
+                // Fix link format if it begins with //
+                if (currentLink.startsWith("//"))
+                    currentLink = "https:" + currentLink;
+
                 // Ignore non-HTML links
                 var checkLink = currentLink.toLowerCase();
                 if (checkLink.startsWith("mailto:") || checkLink.endsWith(".doc") || checkLink.endsWith(".docx") || checkLink.endsWith(".gif") || checkLink.endsWith(".iso") || checkLink.endsWith(".jpeg") || checkLink.endsWith(".jpg") || checkLink.endsWith(".mkv") || checkLink.endsWith(".mp3") || checkLink.endsWith(".mp4") || checkLink.endsWith(".mpg") || checkLink.endsWith(".msi") || checkLink.endsWith(".pdf") || checkLink.endsWith(".png") || checkLink.endsWith(".tar.gz") || checkLink.endsWith(".tar.xz") || checkLink.endsWith(".tgz") || checkLink.endsWith(".torrent") || checkLink.endsWith(".wmv") || checkLink.endsWith(".xls") || checkLink.endsWith(".xlsx") || checkLink.endsWith(".zip")) {
@@ -165,31 +169,6 @@ function crawlPage() {
                 // Handle absolute links
                 } else if (currentLink.startsWith("http://") || currentLink.startsWith("https://")) {
                     var newLink = currentLink;
-                    // Strip trailing slash for consistency
-                    if (newLink.endsWith("/")) { newLink = newLink.substr(0, newLink.length - 1); }
-                    // Add link to scoring queue unless we've already scored it
-                    if (!scoredList.contains(newLink)) {
-                        console.log("      Adding URL " + newLink + " to scoring queue");
-                        scoreList.push(newLink);
-                        scoredList.push(newLink);       // Mark as scored (or to be scored)
-                    }
-                    // Add link to crawling queue unless we've already crawled it
-                    if (!crawledList.contains(newLink)) {
-                        // Add the URL to our crawling list
-                        var newTarget = new Object();
-                        newTarget.url = newLink;
-                        newTarget.depth = target.depth + 1;
-                        if (newTarget.depth <= maxDepth) {
-                            console.log("      Adding URL " + newLink + " to crawling queue");
-                            crawlList.push(newTarget);
-                            crawledList.push(newLink);      // Mark as crawled (or to be crawled)
-                        }
-                    }
-    
-                // Handle misformatted absolute links beginning with //
-                } else if (currentLink.startsWith("//")) {
-                    // Append http or https, depending on parent link
-                    var newLink = target.url.split(":")[0] + ":" + currentLink;
                     // Strip trailing slash for consistency
                     if (newLink.endsWith("/")) { newLink = newLink.substr(0, newLink.length - 1); }
                     // Add link to scoring queue unless we've already scored it
