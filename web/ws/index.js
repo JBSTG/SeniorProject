@@ -115,8 +115,14 @@ function scorePage() {
                 result.isScrapeResult = true;
                 result.url = apiResult.url;
                 result.page_title = apiResult.page_title;
-                client.send(JSON.stringify(result));
-                console.log("      Result pushed to client");
+                // Exception handling here in case client disconnected
+                try {
+                    client.send(JSON.stringify(result));
+                    console.log("      Result pushed to client");
+                }
+                catch (error) {
+                    console.log("      Error--Websocket client disconnected");
+                }
             }
         });
         // Release flag
@@ -143,7 +149,6 @@ function crawlPage() {
             console.log("      " + dom.window.document.querySelectorAll("a").length + " anchor elements found");
             for (var i = 0; i < dom.window.document.querySelectorAll("a").length; i++) {
                 var currentLink = dom.window.document.querySelectorAll("a")[i].toString();
-                var currentLinkDomain = currentLink.split("/")[0] + "//" + currentLink.split("/")[2];
 
                 // Strip any arguments in the URL
                 currentLink = currentLink.split("?")[0];
@@ -154,6 +159,9 @@ function crawlPage() {
                 // Fix link format if it begins with //
                 if (currentLink.startsWith("//"))
                     currentLink = "https:" + currentLink;
+     
+                // Save domain portion of the current link
+                var currentLinkDomain = currentLink.split("/")[0] + "//" + currentLink.split("/")[2];
 
                 // Ignore non-HTML links
                 var checkLink = currentLink.toLowerCase();
@@ -165,6 +173,7 @@ function crawlPage() {
                 // Ignore links to other sites
                 } else if (currentLink.startsWith("http") && !(domain === currentLinkDomain)) {
                     console.log("      Ignoring offiste link:  " + currentLink);
+                    console.log("        targetDomain = " + domain + ", currentLinkDomain = " + currentLinkDomain);
 
                 // Handle absolute links
                 } else if (currentLink.startsWith("http://") || currentLink.startsWith("https://")) {
