@@ -66,29 +66,42 @@ if(!isset($_SESSION["username"])){
                         <p><i class="fa fa-home fa-fw w3-margin-right w3-text-theme"></i>Home</p></a>
                       <a href="" onclick="open_profile(); return false;"><p><i class="fa fa-user-circle-o fa-fw w3-margin-right w3-text-theme"></i>My Profile</p></a>
                       <a href="logoff.php"><p><i class="fa fa-sign-out fa-fw w3-margin-right w3-text-theme"></i>Log Off</p></a>
-                      <div class="follow-col" id="follow-col">
-                            <button class="start-home-link follow-list" id="following" onclick="load_following_bg()">Following (<?php echo $num_following;?>)</button>
-                            <div class="start-home-link v2" id="follow-separator"></div>
-                            <button class="start-home-link follow-list" id="follower">Followers (<?php echo $num_followers;?>)</button>
-                      </div>
                     </div>
                   </div><br>
 
                   <!-- Accordion -->
-                  <div class="w3-card w3-round">
+                  <div class="w3-card w3-round" class="follow-col" id="follow-col">
                     <div class="w3-white">
                       <button class="follow-list w3-button w3-block w3-theme-l1 w3-left-align" id="following" onclick="load_following_bg()">Following <?php echo $num_following;?></button>
+                      <div class="content">Hello
+                      </div>
                     </div>
-                    </div><br>
+                  </div><br>
                   <div class="w3-card w3-round">
                     <div class="w3-white">
                       <button class="follow-list w3-button w3-block w3-theme-l1 w3-left-align" id="follower">Followers <?php echo $num_followers;?></button>
+                      <div class="content">Hello
+                      </div>
                     </div>
                   </div>
               </div>
               <!-- End of Left Coulmn -->
 
               <script>
+                var coll = document.getElementsByClassName("follow-list");
+                var i;
+
+                for (i = 0; i < coll.length; i++) {
+                  coll[i].addEventListener("click", function() {
+                    this.classList.toggle("active");
+                    var content = this.nextElementSibling;
+                    if (content.style.maxHeight){
+                      content.style.maxHeight = null;
+                    } else {
+                      content.style.maxHeight = content.scrollHeight + "px";
+                    } 
+                  });
+                }
                 function open_profile() {
                     var statsView = document.getElementById("statsView");
                     var search = document.getElementById("search");

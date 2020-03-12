@@ -2,33 +2,37 @@
     font-family: 'timeless';
     src: url('Timeless.ttf');
 }
+
 html,
 body {
-    background-color: #1d3461;
     height: 100%;
-    color:darkslategray;
-    font-family: "timeless";
 }
+
 img.scoreIcon{
    height:11px; 
 }
+
 .logo {
     margin:0px auto;
     width: 100%;
 }
+
 .def-prof-pic {
     width: 100%;
 }
+
 .log-out{
     background-color:#eaecf0;
     border: 0px;
     color:#1d3461;
     width: 100%;
 }
+
 #loadingGif{
     height:30px;
     visibility:hidden;
 }
+
 .Body-box {
     overflow-y:auto;
     height: auto;
@@ -51,25 +55,28 @@ img.scoreIcon{
     padding: 10px;
 }
 
-
 #scrapeButton{
     color:#1d3461;
     background-color:#eaecf0;
     border:1px #1d3461 solid;
     height: 30px;
 }
+
 #search{
     color:#1d3461;
     background-color:white;
     border:1px #1d3461 solid;
     height: 30px;
 }
+
 .mainNavBar{
     text-align: center;
 }
+
 .mainNavBarItem{
     padding: 0px;
 }
+
 .mainNavBarItem a{
     color: white;
 }
@@ -87,23 +94,22 @@ img.scoreIcon{
 .follow-count:hover{
     color:blue;
 }
-html,
-body {
-    background-color: #1d3461;
-    height: 100%;
-}
+
 .prof-container {
     width: 200px;
     height: 200px;
     overflow: hidden;
     border:1px gray solid;
 }
+
 .def-prof-pic {
     width: 100%;
 }
+
 .col{
     border:1px black solid;
 }
+
 .log-out{
     margin-top:40px;
 }
@@ -115,6 +121,7 @@ body {
     border-radius: 10px;
     padding: 10px;
 }
+
 .moreInfoButton{
     border:none;
 }
@@ -128,6 +135,7 @@ body {
     background-color:rgba(0,0,0,0.5);
     display:none;
 }
+
 #infoModal{
     display:inline-block;
     text-align:left;
@@ -135,6 +143,43 @@ body {
     background-color:white;
     border-radius:2px;
 }
+
 #articleView{
     display:none;
+}
+
+.follow-list {
+    background-color: #777;
+    color: white;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+}
+
+.active, .follow-list:hover {
+    background-color: #555;
+}
+
+.follow-list:after {
+    content: '\002B';
+    color: white;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+}
+
+.active:after {
+    content: "\2212";
+}
+
+.content {
+    padding: 0 18px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+    background-color: #f1f1f1;
 }
