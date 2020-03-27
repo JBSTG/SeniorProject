@@ -57,9 +57,24 @@ function addComment(username,body,date){
     //This is because I am too lazy to implement synchonicity in the server.
     //Really no big deal, the right date shows up on page refresh.
     if(date==undefined){
-      date="Just Now";
-    }
-    document.getElementById("infoBoxComments").innerHTML += username+": "+body+" "+date+"<br>";
+		date="Just Now";
+	  }
+	  var commentName = document.createElement("div");
+	  commentName.className="w3-panel w3-text-Black";
+	  commentName.innerHTML = "<b>"+username+"</b>";
+	  document.getElementById("infoBoxComments").appendChild(commentName);
+  
+	  var commentDate = document.createElement("div");
+	  commentDate.className="w3-panel w3-text-Gray commentDate";
+	  commentDate.innerHTML="<i>"+date+"</i>";
+	  document.getElementById("infoBoxComments").appendChild(commentDate);
+  
+	  var commentBody = document.createElement("div");
+  
+	  commentBody.className="w3-panel w3-text-black";
+	  commentBody.innerHTML = body+"<br><hr>";
+	  document.getElementById("infoBoxComments").appendChild(commentBody);
+	  //document.getElementById("infoBoxComments").innerHTML += username+": "+body+" "+date+"<br>";
 }
 
 commentServerConnection2.onmessage = function(message) {

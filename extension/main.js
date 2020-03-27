@@ -190,6 +190,9 @@ function moveInfoBox(url,values,x,y){
   }
 }
 
+infoBox.addEventListener("dblclick",function(){
+  infoBox.style.display = "none";
+});
 
 function handleMessage(request, sender, sendResponse) {
   if(request.context=="toggle"){
