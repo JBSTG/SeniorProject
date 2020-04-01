@@ -16,6 +16,12 @@
 		.commentDate{
 			font-size: 9px;
 		}
+		#pageReview{
+			display: block;
+		}
+		#contentPreview{
+			display: none;
+		}
 		</style>
 	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue.css">
@@ -24,14 +30,19 @@
 	</head>
 	<body>
 		<div class="w3-container w3-text-white"><p id="pageTitle"></p></div>
+		<div id="pageReview">
 		<div class="w3-container w3-text-blue-gray"><p id="pageScore"></p></div>
 		<div class="w3-container w3-text-blue-gray"><p id="siteScore"></p></div>
-		
 		<div class="w3-container w3-text-blue-gray"><p id="commentsHeader">Comments:</p></div>
 		<div id="infoBoxComments">
 		</div>
 		<textarea class="w3-input w3-border" style="resize:none" id="commentEntry" placeholder="Add a Comment"></textarea>
-    	<button style="margin-bottom:10px;" id="submitCommentButton2" class="w3-button w3-theme-l1">Post Comment</button>
+		<button style="margin-bottom:10px;" id="submitCommentButton2" class="w3-button w3-theme-l1">Post Comment</button>
+		</div>
+		<div id="contentPreview">
+
+		</div>
+		<button class="w3-button w3-theme-l1" id="modeToggle">Content Extraction</button>
 	</body>
 	<script src="sidebar.js">
 	</script>

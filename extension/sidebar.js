@@ -1,9 +1,12 @@
 var currentArticleId = -1;
 var commentServerConnection2 = new WebSocket("wss://www.datadogsanalytics.com:9000");
+var scrapedMarkup = "";
+var globalUrl;
 
 function handleMessage(request, sender, sendResponse) {
   if(request.context=="explore"){
-    var url = request.URL;
+	var url = request.URL;
+	globalUrl = url;
 	var sReq = new XMLHttpRequest();
 	
     sReq.open("POST","https://datadogsanalytics.com/getArticleInfoAndComments.php",true);
@@ -84,4 +87,33 @@ commentServerConnection2.onmessage = function(message) {
 	  addComment(msg.username,msg.body,msg.date);
 	}
 };
+
+
+document.getElementById("pageReview").style.display = "block";
+document.getElementById("contentPreview").style.display = "none";
+document.getElementById("modeToggle").addEventListener("click",function(){
+	var review = document.getElementById("pageReview");
+	var preview = document.getElementById("contentPreview");
+	
+	//If we are on the comments/review page, switch and load scraped data.
+	if(preview.style.display=="none"){
+		review.style.display = "none";
+		preview.style.display = "block";
+		document.getElementById("modeToggle").innerHTML = "Article Review";
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				document.getElementById("contentPreview").innerHTML = xhttp.responseText;
+				console.log(document.getElementById("contentPreview").innerHTML);
+			}
+		};
+		xhttp.open("POST", "https://www.datadogsanalytics.com/contentExtraction.php", true);
+	    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		xhttp.send("url="+globalUrl);
+	}else{
+		review.style.display = "block";
+		preview.style.display = "none";
+		document.getElementById("modeToggle").innerHTML = "Content Extraction";
+	}
+});
 browser.runtime.onMessage.addListener(handleMessage);
