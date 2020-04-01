@@ -57,7 +57,16 @@ browser.commands.onCommand.addListener(function (command) {
 		browser.tabs.query({active: true, currentWindow: true}, function(tabs) {
 			var responseObject = new Object();
 			responseObject.context = "toggle";
-			
+			browser.tabs.sendMessage(tabs[0].id, responseObject, function() {
+			  //console.log("Toggling position.");
+			});
+			//browser.runtime.sendMessage(responseObject);
+		  });
+	}
+	if (command === "dismiss") {
+		browser.tabs.query({active: true, currentWindow: true}, function(tabs) {
+			var responseObject = new Object();
+			responseObject.context = "dismiss";
 			browser.tabs.sendMessage(tabs[0].id, responseObject, function() {
 			  //console.log("Toggling position.");
 			});

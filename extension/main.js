@@ -5,6 +5,7 @@ var data = buildRequestString(x);
 var linksObject = new Object();
 var infoBox = createInfoBox();
 var isBoxDynamic = 1;
+var isBoxEnabled = 1;
 function handleResponse(message) {
   //console.log(message);
 }
@@ -140,11 +141,17 @@ function createInfoBox(){
   infoBox.style.left = 0+"px";
   infoBox.style.top = 0+"px";
   infoBox.style.display = "none";
+  infoBox.style.pointerEvents = "none";
   document.body.appendChild(infoBox);
   return infoBox;
 }
 
 function moveInfoBox(url,values,x,y){
+
+  if(!isBoxEnabled){
+    return;
+  }
+
   infoBox.innerHTML = "";
   infoBox.style.display = "block";
   infoBox.style.padding = "10px";
@@ -189,27 +196,24 @@ function moveInfoBox(url,values,x,y){
     infoBox.style.position = "fixed";
   }
 }
-
-infoBox.addEventListener("dblclick",function(){
-  infoBox.style.display = "none";
-});
-
 function handleMessage(request, sender, sendResponse) {
+  console.log(request.context);
   if(request.context=="toggle"){
     isBoxDynamic^=1;
-
     if(!isBoxDynamic){
       infoBox.style.left="0px";
       infoBox.style.top="0px";
       infoBox.style.position = "fixed";
     }
-
-
-
-    console.log(isBoxDynamic);
+    return;
+  }
+  if(request.context="dismiss"){
+    isBoxEnabled^=1;
+    if(!isBoxEnabled){
+      infoBox.style.display = "none";
+    }
   }
 }
 browser.runtime.onMessage.addListener(handleMessage);
-
 
 console.log("END");

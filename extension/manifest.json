@@ -25,6 +25,12 @@
           "default": "Alt+Shift+0"
         },
         "description": "Switch modes for the pop-up"
+      },
+      "dismiss": {
+        "suggested_key": {
+          "default": "Alt+Shift+9"
+        },
+        "description": "Turns off the pop-up"
       }
     },
     "sidebar_action": {

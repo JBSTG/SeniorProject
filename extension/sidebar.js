@@ -11,15 +11,16 @@ function handleMessage(request, sender, sendResponse) {
     sReq.send("url="+url);
     console.log(url);
     sReq.onload = function(){
-      var newURL = "{\""+url+"\":"+this.responseText+"}";
-      console.log(this.responseText);
+	  var newURL = "{\""+url+"\":"+this.responseText+"}";
+	  console.log(this.responseText);
 	  newURL = JSON.parse(newURL);
+
 	  currentArticleId = newURL[url].id;
       document.getElementById("pageTitle").innerHTML = newURL[url].title;
       document.getElementById("siteScore").innerHTML = "Site Score: " + newURL[url].site_score+"%";
       document.getElementById("commentsHeader").style.visibility="visible";
       if(newURL[url].page_score==1){
-		document.getElementById("pageScore").innerHTML ="This page is clickbait";
+		document.getElementById("pageScore").innerHTML = "This page is clickbait";
 		document.getElementById("pageTitle").parentElement.classList.add("w3-deep-orange");
 	  }else{
 		document.getElementById("pageScore").innerHTML ="This page is not clickbait";
