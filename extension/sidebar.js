@@ -103,7 +103,8 @@ document.getElementById("modeToggle").addEventListener("click",function(){
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
-				document.getElementById("contentPreview").innerHTML = xhttp.responseText;
+				document.getElementById("contentPreview").innerHTML = "<iframe src=\"" + globalUrl + "\"></iframe>";
+				//document.getElementById("contentPreview").innerHTML = xhttp.responseText;
 				console.log(document.getElementById("contentPreview").innerHTML);
 			}
 		};

@@ -29,9 +29,11 @@ window.onload = function(e){
 	var links = document.getElementsByTagName("A");
 	console.log("links[] contains " + links.length + " items");
 	// Query API for each link in array
-	var i;
+  var i;
+  /*
 	for (i = 0; i < links.length; i++)
 		queryAPI(links[i]);
+  */
 }
 
 function queryAPI (url) {
@@ -61,21 +63,6 @@ function buildRequestString(links){
     //console.log(requestString);
     return requestString;
 }
-/*
-//TODO: Needs to work with dynamically added elements as well.
-var domLinks = document.getElementsByTagName("a");
-console.log("EEE");
-for(var i = 0;i<domLinks.length;i++){
-    domLinks[i].addEventListener("mouseover", function(e){
-        if(linksObject){
-            var url = e.target.href;
-            console.log(url+": "+linksObject[url].site_score);
-            var linkScores = linksObject[url];
-            moveInfoBox(url,linkScores,e.pageX,e.pageY);
-        }
-    });
-}
-*/
 
 function processLinks(e) {
   // This gets called by the mouseover event
@@ -155,6 +142,7 @@ function moveInfoBox(url,values,x,y){
   infoBox.innerHTML = "";
   infoBox.style.display = "block";
   infoBox.style.padding = "10px";
+  infoBox.style.maxHeight = "150px";
 
   // Page title  
   var title = document.createElement("p");
@@ -162,7 +150,6 @@ function moveInfoBox(url,values,x,y){
     title.innerHTML = "<a href='" + url + "'><font color=white>" + values.page_title + "</font></a>";
   else
 	  title.innerHTML = "<a href='" + url + "'><font color=white>" + url + "</font></a>";
-
   title.style.margin = "0px";
   title.style.padding = "0px";
   infoBox.appendChild(title);
