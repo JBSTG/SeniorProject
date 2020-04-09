@@ -144,12 +144,15 @@ function moveInfoBox(url,values,x,y){
   infoBox.style.padding = "10px";
   infoBox.style.maxHeight = "150px";
 
+  //Icon
+  var icon = document.createElement("img");
+  icon.src = "https://datadogsanalytics.com/domainIcon.php?url=" + url + "";
+  infoBox.appendChild(icon);
+  icon.style.float = "left";
+  icon.style.margin = "5px";
   // Page title  
   var title = document.createElement("p");
-  if (values.page_title.length > 0)
-    title.innerHTML = "<a href='" + url + "'><font color=white>" + values.page_title + "</font></a>";
-  else
-	  title.innerHTML = "<a href='" + url + "'><font color=white>" + url + "</font></a>";
+  title.innerHTML = values.page_title;
   title.style.margin = "0px";
   title.style.padding = "0px";
   infoBox.appendChild(title);
