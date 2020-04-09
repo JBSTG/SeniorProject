@@ -6,7 +6,11 @@
     $dbUsername = 'datadogs';
     $dbPassword = 'DataDogs2020CSUB';
     $dbName     = 'analytics';
-    
+
+    // Prevent browsers from caching (for testing purposes)
+    header("Cache-Control: no-cache, must-revalidate");
+    header("Pragma: no-cache");
+        
     //Create connection and select DB
     $db = new mysqli($dbHost, $dbUsername, $dbPassword, $dbName);
     
@@ -17,7 +21,7 @@
 
     // Parse domain name from URL
     $domain = parseDomain($_REQUEST["url"]);    
-    
+
     //Get image data from database
     $result = $db->query("SELECT Icon FROM domain_pagescore WHERE Domain = '$domain'");
     if ($result->num_rows > 0) {
@@ -27,14 +31,14 @@
         header("Content-type: image/x-icon");
         
         $icon = $imgData['Icon'];
-        echo $icon; 
+        if (strlen($icon) > 0)
+          echo $icon; 
+        else
+          readfile("/var/www/html/Images/defaultDomainIcon.ico");
+
     } else {
         // Put an alternate icon here
-        //$file = '/Images/Default_Profile_Pic.png';
-        //$type = 'image/png';
-        //header('Content-Type:'.$type);
-        //header('Content-Length: ' . filesize($file));
-        //readfile($file);
-        echo 'Image not found...';
+        header("Content-type: image/x-icon");
+        readfile("/var/www/html/Images/defaultDomainIcon.ico");
     }    
 ?>
