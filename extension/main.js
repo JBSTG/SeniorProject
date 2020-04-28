@@ -177,7 +177,7 @@ function moveInfoBox(url,values,x,y){
   infoBox.style.zIndex ="999999999";
   if(isBoxDynamic){
     infoBox.style.left = x-75 + "px";
-    infoBox.style.top = y-60 + "px";
+    infoBox.style.top = y-160 + "px";
     infoBox.style.position = "absolute";
 
   }else{
