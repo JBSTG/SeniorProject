@@ -147,6 +147,7 @@ function moveInfoBox(url,values,x,y){
   //Icon
   var icon = document.createElement("img");
   icon.src = "https://datadogsanalytics.com/domainIcon.php?url=" + url + "";
+  icon.style.maxWidth = "20px";
   infoBox.appendChild(icon);
   icon.style.float = "left";
   icon.style.margin = "5px";
